@@ -5,13 +5,6 @@
 //! traits for implementing various configuration providers.
 
 pub mod errors;
+pub mod loader;
 pub mod traits;
 pub mod types;
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
-    }
-}
