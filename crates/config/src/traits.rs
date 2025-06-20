@@ -25,7 +25,7 @@ pub trait ConfigurationProvider {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::types::LogLevel;
+    use crate::types::{LogFormat, LogLevel};
     use std::collections::HashMap;
 
     struct MockProvider {
@@ -56,6 +56,7 @@ mod tests {
         let config = AppConfig {
             environment: "test".to_string(),
             log_level: LogLevel::Debug,
+            log_format: LogFormat::Json,
             feature_flags: flags,
         };
 

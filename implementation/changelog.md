@@ -3,6 +3,14 @@
 ## [2025-06-21] - Dev Env Setup - IN_PROGRESS
 
 ### Implemented
+- **Logging Crate (`ciphr-logging`)**:
+    - Implemented a structured logging system using the `tracing` ecosystem.
+    - Created a `JsonFormatter` for outputting logs in a machine-readable format.
+    - Added an `init_logging` function to configure and initialize the global subscriber based on `AppConfig`.
+    - Defined `RequestContext` to enable log correlation via request IDs.
+    - Added comprehensive error types for the logging system.
+    - Updated `AppConfig` in `ciphr-config` to include `log_format`.
+    - Added unit tests to verify initialization with different formats.
 - **Feature Flag Crate (`ciphr-feature-flags`)**:
     - Implemented a basic, extensible feature flag evaluation engine.
     - Defined a `FeatureFlagEvaluator` trait to support multiple evaluation strategies (Strategy Pattern).
@@ -33,6 +41,8 @@
 - **Rust Workspace**: Initialized a Rust workspace with a root `Cargo.toml`.
 - **Crate Structure**: Created a modular crate structure under `crates/` (`cli`, `config`, `dev-env`, `feature-flags`, `logging`, `test-utils`).
 - **Architecture Docs**: Added `docs/architecture.md` to document the workspace structure.
+- **Structured Logging (`tracing`)**: Chose the `tracing` crate as the foundation for logging and observability.
+    - Rationale: `tracing` provides structured, context-aware diagnostics. Unlike traditional logging, it captures information about the execution flow, which is invaluable for debugging complex, asynchronous applications. The use of custom formatters allows us to produce JSON logs suitable for modern log aggregation platforms.
 - **Feature Flag Engine (Strategy Pattern)**: The core of the feature flag system is the `FeatureFlagEvaluator` trait.
     - Rationale: This allows for different evaluation methods (e.g., on/off, percentage, user targeting) to be developed and swapped without changing the code that consumes the flags. It promotes extensibility and adheres to the Open/Closed Principle.
 
@@ -52,6 +62,7 @@
 - **Trade-offs**: Slightly more complex initial setup compared to a single crate, but significant long-term benefits in maintainability and scalability.
 
 ### Current State
+- The `ciphr-logging` crate provides configurable structured logging.
 - The `ciphr-feature-flags` crate has a foundational evaluation engine.
 - Common development tasks are automated and documented in a `justfile`.
 - The `ciphr-config` crate can now load configuration from TOML files.
@@ -62,11 +73,11 @@
 - The Rust workspace is successfully set up and validated with `cargo check`.
 - Core crate structure is in place for future development.
 - Architectural and setup documentation has been created.
-- Tasks #001, #002, #003, #004, #005, and #007 from `tasks.md` are complete.
+- Tasks #001, #002, #003, #004, #005, #007, and #008 from `tasks.md` are complete.
 
 ### Next Steps
+- Set up the testing framework and utilities (Task #009).
 - Implement structured logging infrastructure with Tracing (Task #008).
-- Create basic `justfile` tasks for common development workflows (Task #006).
 
 ### Technical Debt
 - The `ciphr-config` crate does not yet support environment variable overrides or watching for file changes.

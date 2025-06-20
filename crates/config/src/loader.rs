@@ -59,7 +59,8 @@ mod tests {
     fn test_load_valid_config() {
         let content = r#"
             environment = "production"
-            log_level = "Debug"
+            log_level = "debug"
+            log_format = "json"
             [feature_flags]
             new_ui = true
         "#;
@@ -71,6 +72,7 @@ mod tests {
 
         assert_eq!(config.environment, "production");
         assert_eq!(config.log_level, crate::types::LogLevel::Debug);
+        assert_eq!(config.log_format, crate::types::LogFormat::Json);
         assert_eq!(config.feature_flags.get("new_ui"), Some(&true));
     }
 
@@ -96,7 +98,8 @@ mod tests {
     fn test_load_validation_error() {
         let content = r#"
             environment = ""
-            log_level = "Info"
+            log_level = "info"
+            log_format = "text"
         "#;
         let mut file = NamedTempFile::new().unwrap();
         write!(file, "{}", content).unwrap();
