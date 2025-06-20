@@ -1,6 +1,54 @@
 {
   "lockfile_version": "1",
   "packages": {
+    "cargo-audit@latest": {
+      "last_modified": "2025-05-16T20:19:48Z",
+      "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#cargo-audit",
+      "source": "devbox-search",
+      "version": "0.21.2",
+      "systems": {
+        "aarch64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/n64k2j55yvh4v3lqshmpfpwv00jbkcak-cargo-audit-0.21.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/n64k2j55yvh4v3lqshmpfpwv00jbkcak-cargo-audit-0.21.2"
+        },
+        "aarch64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/kyf0wzs3x4149y0wg2yf48ihkia31i95-cargo-audit-0.21.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/kyf0wzs3x4149y0wg2yf48ihkia31i95-cargo-audit-0.21.2"
+        },
+        "x86_64-darwin": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/fa7idm78mbywjblalhckawvpj56jj94g-cargo-audit-0.21.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/fa7idm78mbywjblalhckawvpj56jj94g-cargo-audit-0.21.2"
+        },
+        "x86_64-linux": {
+          "outputs": [
+            {
+              "name": "out",
+              "path": "/nix/store/c6s5m42pbr1chnsdijgdj46871lyszm9-cargo-audit-0.21.2",
+              "default": true
+            }
+          ],
+          "store_path": "/nix/store/c6s5m42pbr1chnsdijgdj46871lyszm9-cargo-audit-0.21.2"
+        }
+      }
+    },
     "git@latest": {
       "last_modified": "2025-05-16T20:19:48Z",
       "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#git",
