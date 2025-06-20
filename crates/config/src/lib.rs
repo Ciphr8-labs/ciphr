@@ -1,14 +1,17 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
+//! The `ciphr-config` crate provides a flexible and type-safe configuration
+//! management system for the Ciphr platform.
+//!
+//! It includes definitions for core configuration types, error handling, and
+//! traits for implementing various configuration providers.
+
+pub mod errors;
+pub mod traits;
+pub mod types;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
-
     #[test]
     fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
+        assert_eq!(2 + 2, 4);
     }
 }
