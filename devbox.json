@@ -2,7 +2,8 @@
   "packages": [
     "rustup@latest",
     "just@latest",
-    "git@latest"
+    "git@latest",
+    "cargo-audit@latest"
   ],
   "shell": {
     "init_hook": [
@@ -15,4 +16,4 @@
       "test": "cargo test"
     }
   }
-} 
+}
