@@ -10,3 +10,4 @@ authors.workspace = true
 repository.workspace = true
 
 [dependencies]
+tempfile = { workspace = true }

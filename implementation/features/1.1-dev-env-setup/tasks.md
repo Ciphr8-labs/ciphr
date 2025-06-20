@@ -487,15 +487,15 @@ Foundation for observability. Must be fast and secure.
 
 #### Task #009: Testing Framework Setup and Utilities
 **Priority**: P1  
-**Status**: `[ ]` Not Started  
-**Assignee**: Unassigned  
+**Status**: `[x]` In Progress
+**Assignee**: Gemini
 **Estimated Effort**: 2-3 days  
 
 **Description**:
 Implement comprehensive testing utilities, harnesses, and infrastructure for the ciphr-testing crate including property-based and benchmark testing.
 
 **Acceptance Criteria**:
-- [ ] Test harness with environment setup and teardown
+- [x] Test harness with environment setup and teardown
 - [ ] Mock file system utilities for isolated testing
 - [ ] Property-based testing integration with proptest
 - [ ] Benchmark infrastructure with criterion
@@ -518,7 +518,7 @@ Implement comprehensive testing utilities, harnesses, and infrastructure for the
 - **Resource Requirements**: File system access for temporary directories
 
 **Deliverables**:
-- [ ] `ciphr-testing/src/harness.rs` with test environment management
+- [x] `ciphr-testing/src/harness.rs` with test environment management
 - [ ] `ciphr-testing/src/mock_fs.rs` with file system mocking utilities
 - [ ] `ciphr-testing/src/property.rs` with proptest integration
 - [ ] Documentation: Testing best practices and utility guide
