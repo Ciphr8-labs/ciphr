@@ -1,0 +1,16 @@
+#!/bin/sh
+#
+# Pre-push hook that runs a final quick check before pushing.
+
+set -e
+
+echo "Running pre-push checks..."
+
+# Run cargo check as a final verification
+cargo check --all
+if [ $? -ne 0 ]; then
+    echo "Error: 'cargo check' failed. Please fix the issues before pushing."
+    exit 1
+fi
+
+echo "✅ Pre-push checks passed." 

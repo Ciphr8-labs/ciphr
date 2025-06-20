@@ -3,6 +3,10 @@
 ## [2025-06-21] - Dev Env Setup - IN_PROGRESS
 
 ### Implemented
+- **Git Workflow Automation**:
+    - Created shared Git hooks (`pre-commit`, `commit-msg`, `pre-push`) to automate formatting, linting, testing, and commit message validation.
+    - Added a `.github/pull_request_template.md` to standardize PRs.
+    - Wrote `docs/contributing.md` to explain the development workflow and contribution guidelines.
 - **Devbox Environment**: Created a `devbox.json` to provide a consistent, cross-platform development environment with `rustup`, `just`, and `git`.
 - **Validation Script**: Added an executable script (`scripts/validate-environment.sh`) to verify tool availability and versions.
 - **Setup Documentation**: Wrote `docs/environment-setup.md` with clear instructions for new contributors.
@@ -11,6 +15,8 @@
 - **Architecture Docs**: Added `docs/architecture.md` to document the workspace structure.
 
 ### Technical Decisions
+- **Git Hooks**: Adopted a shared `.githooks` directory instead of individual `.git/hooks` setups.
+- **Rationale**: This ensures that all contributors use the same quality gates, making the process of enabling them as simple as a single `git config` command. It keeps workflow automation version-controlled and consistent.
 - **Environment Management**: Chose Devbox to ensure a reproducible development environment.
 - **Rationale**: Devbox, powered by Nix, provides an isolated and consistent environment across macOS, Linux, and Windows (via WSL2), which is crucial for a distributed open-source team and community contributors. It simplifies onboarding to a single `devbox shell` command.
 - **Architecture**: Adopted a workspace structure with multiple crates.
@@ -18,15 +24,17 @@
 - **Trade-offs**: Slightly more complex initial setup compared to a single crate, but significant long-term benefits in maintainability and scalability.
 
 ### Current State
+- Automated quality gates (format, lint, test, commit message validation) are available via Git hooks.
+- Contribution guidelines and PR templates are in place.
 - A reproducible development environment can be launched with `devbox shell`.
 - The Rust workspace is successfully set up and validated with `cargo check`.
 - Core crate structure is in place for future development.
 - Architectural and setup documentation has been created.
-- Tasks #001 and #002 from `tasks.md` are complete.
+- Tasks #001, #002 and #003 from `tasks.md` are complete.
 
 ### Next Steps
-- Proceed to Task #003: Git Workflow Automation and Quality Gates.
 - Start implementing core functionality within the newly created crates, beginning with `ciphr-config` (Task #004).
+- Create basic `justfile` tasks for common development workflows (Task #006).
 
 ### Technical Debt
 - The newly created crates contain only template code from `cargo new`. They need to be populated with their respective logic.

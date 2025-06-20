@@ -1,0 +1,20 @@
+#!/bin/sh
+#
+# Commit-msg hook that validates the commit message format.
+# It ensures the message follows the Conventional Commits specification.
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Regex for Conventional Commits
+# Example: feat(scope): description
+# Supports types: feat, fix, docs, style, refactor, test, chore
+CONVENTIONAL_COMMIT_REGEX="^(feat|fix|docs|style|refactor|test|chore)(\(.+\))?: .+"
+
+if ! echo "$COMMIT_MSG" | grep -qE "$CONVENTIONAL_COMMIT_REGEX"; then
+    echo "Error: Invalid commit message format." >&2
+    echo "Your commit message must follow the Conventional Commits standard." >&2
+    echo "Example: 'feat(config): add new setting'" >&2
+    echo "Allowed types: feat, fix, docs, style, refactor, test, chore" >&2
+    exit 1
+fi 

@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# Pre-commit hook that runs formatters, linters, and tests.
+# If any of these steps fail, the commit will be aborted.
+
+set -e
+
+echo "Running pre-commit checks..."
+
+# 1. Format code
+echo "Formatting code with 'cargo fmt'..."
+cargo fmt --all -- --check
+if [ $? -ne 0 ]; then
+    echo "Error: 'cargo fmt' found formatting issues. Please run 'cargo fmt --all' to fix."
+    exit 1
+fi
+
+# 2. Lint code
+echo "Linting code with 'cargo clippy'..."
+cargo clippy --all-targets -- -D warnings
+if [ $? -ne 0 ]; then
+    echo "Error: 'cargo clippy' found issues. Please fix them before committing."
+    exit 1
+fi
+
+# 3. Run tests
+echo "Running tests with 'cargo test'..."
+cargo test --all
+if [ $? -ne 0 ]; then
+    echo "Error: Tests failed. Please fix them before committing."
+    exit 1
+fi
+
+echo "✅ Pre-commit checks passed." 
