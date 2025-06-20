@@ -1,0 +1,346 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Changelog Manager
+
+## Critical Rule: Always Read Changelog First
+
+**BEFORE ANY OTHER ACTION**, you must read `implementation/changelog.md` to understand:
+
+1. **Is this greenfield or existing?**
+   - Empty/missing file = Greenfield implementation
+   - Has content = Existing implementation with history
+
+2. **What's the implementation sequence?**
+   - Understand what has been built in what order
+   - Identify established patterns and conventions
+   - Note any technical debt or known issues
+
+3. **What's the current state?**
+   - What was last worked on?
+   - What are the next planned steps?
+   - Are there any blockers or dependencies?
+
+## Changelog Reading Protocol
+
+### For Empty/Missing Changelog
+
+```markdown
+Status: GREENFIELD PROJECT
+Action: Initialize new implementation tracking
+Next: Create first feature design.md and task.md
+```
+
+### For Existing Changelog
+
+1. **Read entries from newest to oldest**
+2. **Identify current feature being worked on**
+3. **Understand the progression of implementation**
+4. **Note any unfinished work or technical debt**
+5. **Check for dependencies or blockers mentioned**
+
+## Changelog Structure
+
+```markdown
+# Implementation Changelog
+
+## [YYYY-MM-DD] - {Feature Name} - {Status}
+
+### Context
+Brief explanation of what this change addresses.
+
+### Implemented
+- Specific functionality that was added
+- Technical components built
+- API endpoints created
+- Database changes made
+
+### Technical Decisions
+- **Decision**: Choice made
+- **Rationale**: Why this choice was made
+- **Alternatives**: What else was considered
+- **Trade-offs**: What we gained/lost
+
+### Changes to Previous Implementation
+- What was modified from earlier work
+- Why changes were necessary
+- Impact on other features
+
+### Testing
+- Unit tests added/updated
+- Integration tests created
+- Manual testing performed
+- Known test gaps
+
+### Documentation Updated
+- Code documentation added
+- API docs updated
+- Architecture docs modified
+- Decision records created
+
+### Current State
+- What is now working/complete
+- What is partially implemented
+- What still needs work
+
+### Next Steps
+- Immediate next tasks to work on
+- Dependencies that need to be resolved
+- Future improvements planned
+
+### Technical Debt & Issues
+- Known problems or shortcuts taken
+- Performance issues identified
+- Security considerations noted
+- Refactoring needed
+
+---
+
+## [Previous Date] - {Previous Feature} - {Previous Status}
+...
+```
+
+## Status Classification
+
+### Feature Status Values
+
+- **STARTED**: Feature design complete, implementation begun
+- **IN_PROGRESS**: Core implementation underway
+- **TESTING**: Implementation complete, testing in progress  
+- **COMPLETE**: Fully implemented and tested
+- **BLOCKED**: Cannot proceed due to dependencies
+- **PAUSED**: Temporarily stopped for other priorities
+
+### Implementation Status Assessment
+
+When reading changelog, classify current state:
+
+```rust
+pub enum ProjectState {
+    Greenfield,
+    ActiveDevelopment { 
+        current_feature: String,
+        progress: String,
+        blockers: Vec<String>,
+    },
+    BetweenFeatures {
+        last_completed: String,
+        next_planned: Option<String>,
+    },
+    Blocked {
+        feature: String,
+        blockers: Vec<String>,
+        waiting_for: String,
+    },
+}
+```
+
+## Changelog Update Protocol
+
+### When to Update
+
+1. **Starting new work**: Add entry for beginning new feature
+2. **Completing major tasks**: Update with progress made
+3. **Making technical decisions**: Document choices and rationale
+4. **Encountering issues**: Note problems and how they were resolved
+5. **Completing features**: Final summary and next steps
+
+### What to Include
+
+#### Essential Information
+- **What was implemented** (specific functionality)
+- **Why decisions were made** (rationale and context)
+- **How it affects existing code** (integration points)
+- **What still needs work** (remaining tasks)
+
+#### Technical Details
+- Architecture patterns used
+- Database schema changes
+- API changes or additions
+- Performance implications
+- Security considerations
+
+#### Process Information
+- Testing approach taken
+- Documentation updated
+- Dependencies resolved
+- Next priorities identified
+
+### Update Template
+
+```markdown
+## [YYYY-MM-DD] - {Feature Name} - {Status Update}
+
+### Context
+What prompted this work/update?
+
+### Work Completed
+- [ ] Specific task 1 completed
+- [ ] Specific task 2 completed  
+- [ ] Specific task 3 in progress
+
+### Technical Implementation
+**Architecture Changes**:
+- Pattern: Used clean architecture with DDD
+- Layers: Separated domain, application, infrastructure
+- Dependencies: Added sqlx for database, axum for REST API
+
+**Code Changes**:
+- Added domain entities: User, UserRepository trait
+- Implemented UserService with business logic
+- Created REST endpoints: POST /users, GET /users/:id
+- Added validation using custom value objects
+
+### Decisions Made
+**Database Choice**: PostgreSQL vs SQLite
+- Chose: PostgreSQL
+- Rationale: Better for production, supports advanced features
+- Trade-offs: More complex setup, but better scalability
+
+**Error Handling Strategy**: thiserror vs anyhow
+- Chose: thiserror for library code, anyhow for applications
+- Rationale: Better error typing and downstream consumption
+- Trade-offs: More boilerplate, but clearer error contracts
+
+### Testing Status
+- Unit tests: ✅ Domain logic covered
+- Integration tests: ✅ Repository implementations
+- API tests: ✅ REST endpoints tested
+- Manual testing: ✅ Happy path verified
+- Edge cases: ❌ Still need to test validation errors
+
+### Documentation Updates
+- Added inline docs for all public APIs
+- Updated README with setup instructions  
+- Created API documentation in docs/api/
+- Added architecture decision record for database choice
+
+### Current State
+**Working**: 
+- User creation via REST API
+- User retrieval by ID
+- Basic validation
+
+**Partially Working**:
+- User listing (pagination not implemented)
+- Error responses (need standardization)
+
+**Not Started**:
+- User updates
+- User deletion
+- Authentication
+
+### Next Steps
+1. Implement user listing with pagination
+2. Standardize error response format
+3. Add authentication middleware
+4. Implement user update operations
+
+### Known Issues
+- Error responses inconsistent format
+- No input sanitization beyond validation
+- Database connection not pooled properly
+- No logging implementation yet
+
+### Dependencies/Blockers
+- Need authentication library decision
+- Waiting for front-end API requirements
+- Database migration strategy needs planning
+```
+
+## Changelog Reading Strategies
+
+### Quick Status Check
+```markdown
+# Quick Assessment Protocol
+
+1. Check latest entry date - how recent?
+2. Check latest status - what phase?
+3. Check next steps - what's planned?
+4. Check blockers - anything stopping progress?
+```
+
+### Deep Understanding
+```markdown
+# Deep Analysis Protocol
+
+1. Read last 3-5 entries to understand trajectory
+2. Identify established patterns and conventions
+3. Note recurring issues or technical debt
+4. Understand architectural decisions and rationale
+5. Map out feature dependencies and relationships
+```
+
+### Integration Planning
+```markdown
+# Integration Assessment
+
+1. What patterns are established?
+2. What testing strategies are in use?
+3. What documentation standards exist?
+4. What deployment/build processes are set up?
+5. What third-party dependencies are in use?
+```
+
+## Common Changelog Mistakes to Avoid
+
+### Don't Do This
+- Vague entries: "Fixed some bugs"
+- Missing rationale: "Changed to use PostgreSQL"
+- No next steps: "Feature complete"
+- Missing context: "Updated user code"
+
+### Do This Instead
+- Specific entries: "Fixed validation error in email parsing that was rejecting valid .co.uk domains"
+- Clear rationale: "Changed to PostgreSQL because SQLite doesn't support our concurrent user requirements"
+- Clear next steps: "Feature complete. Next: implement user authentication using JWT tokens"
+- Rich context: "Updated user domain model to separate UserEntity from UserDto, improving clean architecture boundaries"
+
+## Emergency Recovery Protocol
+
+### If Changelog is Corrupted/Lost
+
+1. **Analyze codebase** for clues about implementation sequence
+2. **Review git history** if available for change patterns
+3. **Examine tests** to understand what functionality exists
+4. **Check documentation** for architectural decisions
+5. **Rebuild changelog** from available evidence
+6. **Document current state** as starting point for future changes
+
+### Changelog Recovery Template
+
+```markdown
+# Implementation Changelog - Recovered [Date]
+
+## Recovery Note
+Original changelog was lost/corrupted. This reconstruction is based on:
+- Code analysis as of [date]
+- Git history review
+- Documentation examination
+- Test coverage analysis
+
+## Current State Assessment - [Date]
+
+### What Exists
+- [List discovered functionality]
+- [List architectural patterns found]
+- [List dependencies identified]
+
+### Technical Decisions Inferred
+- [List patterns that suggest decisions made]
+- [Note any inconsistencies found]
+
+### Gaps Identified
+- [List functionality that seems incomplete]
+- [Note missing tests or documentation]
+
+### Next Steps
+- [Immediate priorities to establish]
+- [Documentation that needs creation]
+- [Technical debt to address]
+
+---
+# Future entries follow standard format from here
+```

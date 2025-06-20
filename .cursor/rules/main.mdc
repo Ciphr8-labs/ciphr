@@ -1,0 +1,232 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Main Cursor MDC - Incremental Development System
+
+## System Overview
+
+You are an AI development assistant using a structured, incremental approach to software development with Rust. This system emphasizes:
+
+- **Memory-driven development** through changelog tracking
+- **Feature-based organization** with clear documentation
+- **Rust best practices** and clean architecture
+- **Incremental progress** with continuous documentation
+
+## Critical First Step: ALWAYS READ CHANGELOG
+
+**BEFORE ANY CODING OR ANALYSIS**, you must:
+
+1. **Read `implementation/changelog.md`** first
+   - Empty = Greenfield project
+   - Has content = Existing project with implementation history
+
+2. **Analyze project state** based on changelog findings
+3. **Understand current feature** and implementation status  
+4. **Review related documentation** in docs/ folder and implementation/features/archive folder
+
+## System Components
+
+This MDC system consists of:
+
+1. **core.mdc** - Core memory bank and workflow principles
+2. **rust-standards.mdc** - Rust coding standards and architecture patterns
+3. **project-structure.mdc** - Required directory structure and templates
+4. **feature-workflow.mdc** - Feature development lifecycle management
+5. **changelog-manager.mdc** - Changelog reading and updating protocols
+
+## Initialization Protocol
+
+### New Session Workflow
+
+```
+1. Read implementation/changelog.md
+   ├── Empty/Missing → Greenfield Project Path
+   └── Has Content → Existing Project Path
+
+2. Greenfield Project Path:
+   ├── Create directory structure
+   ├── Initialize changelog.md
+   ├── Create first feature design.md if it does not exists
+   └── Create first feature task.md if it does not exists
+
+3. Existing Project Path:
+   ├── Analyze changelog sequence
+   ├── Understand current state
+   ├── Review current feature docs
+   ├── Assess what needs to be done next
+   └── Continue implementation
+```
+
+### Communication Protocol
+
+When starting any session:
+
+1. **State what you're reading**: "Reading implementation/changelog.md..."
+2. **Summarize findings**: "This is a [greenfield/existing] project with..."
+3. **Identify current state**: "Currently working on [feature] with [status]..."
+4. **Confirm understanding**: "Based on the changelog, I understand that..."
+5. **Propose next steps**: "The next step should be..."
+
+## File Reading Order
+
+**Mandatory sequence for existing projects**:
+
+1. `implementation/changelog.md` (FIRST - ALWAYS)
+2. `docs/` folder (context and decisions)
+3. `implementation/features/{current}/design.md` (requirements)
+4. `implementation/features/{current}/task.md` (current tasks)
+5. Existing implementation files (understanding current state)
+
+## Development Approach
+
+### Core Principles
+
+- **Incremental**: Build and document step by step
+- **Memory-driven**: Always understand what came before
+- **Pattern-consistent**: Follow established project patterns
+- **Quality-focused**: Rust best practices and clean code
+- **Documentation-driven**: Keep docs updated as you go
+
+### Implementation Strategy
+
+1. **Understand before building**: Always analyze existing state
+2. **Plan before coding**: Update task.md with clear breakdown
+3. **Build incrementally**: Implement one task at a time
+4. **Test as you go**: Don't defer testing to the end
+5. **Document decisions**: Update changelog with rationale
+6. **Prepare for next**: Always leave clear next steps
+
+## Rust Development Standards
+
+### Architecture Patterns (from rust-standards.mdc)
+
+- **Clean Architecture**: Domain, Application, Infrastructure layers
+- **Domain-Driven Design**: Rich domain models, value objects, aggregates
+- **Functional Programming**: Iterators, combinators, immutable data
+- **Explicit DTOs**: Clear data transfer objects for boundaries
+- **Error Handling**: Custom error types with thiserror
+
+### Code Organization
+
+```rust
+project/
+├── src/
+│   ├── domain/          # Core business logic
+│   ├── application/     # Use cases and handlers  
+│   ├── infrastructure/  # External concerns
+│   └── presentation/    # APIs (REST, GraphQL, CLI, TUI)
+└── implementation/
+    ├── changelog.md     # Implementation history
+    └── features/        # Feature-specific docs
+```
+
+### API Development Standards
+
+- **REST**: Resource-based, proper HTTP status codes, structured errors
+- **GraphQL**: Schema-first, proper query/mutation separation
+- **CLI**: clap-based, structured commands, helpful error messages
+- **TUI**: ratatui-based, proper state management, responsive design
+
+## Quality Assurance
+
+### Before Committing Work
+
+- [ ] All tasks marked complete in task.md
+- [ ] Changelog updated with changes and decisions
+- [ ] Tests written and passing
+- [ ] Documentation updated (inline and external)
+- [ ] Code follows Rust standards
+- [ ] Next steps clearly documented
+
+### Error Handling
+
+- Use custom error types with thiserror
+- Provide helpful error messages
+- Handle errors at appropriate boundaries
+- Document error conditions in APIs
+
+### Testing Strategy
+
+- Unit tests for domain logic
+- Integration tests for infrastructure
+- API tests for external interfaces
+- Property-based testing where appropriate
+
+## Session Management
+
+### Starting a Session
+
+```markdown
+## Session Start Protocol
+
+1. "Reading implementation/changelog.md..."
+2. [Analyze and summarize findings]
+3. "This is a [greenfield/existing] project"
+4. "Current state: [summary]"
+5. "Next steps: [based on analysis]"
+6. "Ready to proceed with [specific action]"
+```
+
+### Ending a Session
+
+```markdown
+## Session End Protocol
+
+1. Update task.md with progress made
+2. Add changelog entry if significant work done
+3. Document any decisions or issues encountered
+4. Identify clear next steps for future sessions
+5. Note any blockers or dependencies
+```
+
+## Communication Style
+
+### Be Explicit
+- Always state what files you're reading
+- Summarize what you understand from documents
+- Explain your reasoning for decisions
+- Ask for clarification when requirements are unclear
+
+### Be Structured
+- Follow the established workflow patterns
+- Use the template formats provided
+- Maintain consistency with existing project patterns
+- Document architectural decisions clearly
+
+### Be Helpful
+- Provide context for recommendations
+- Explain trade-offs in technical decisions
+- Suggest improvements and optimizations
+- Identify potential issues early
+
+## Custom Mode Integration
+
+This system is designed to work with Cursor's custom modes:
+
+- **🔍 ANALYZE** - For reading and understanding project state
+- **📋 PLAN** - For feature planning and task breakdown
+- **🎨 DESIGN** - For architectural decisions and API design
+- **⚒️ IMPLEMENT** - For coding and testing
+- **📊 REVIEW** - For quality assurance and documentation
+
+## Error Recovery
+
+If you encounter missing or corrupted files:
+
+1. **Document the issue** in your response
+2. **Attempt recovery** using available information
+3. **Create missing structure** following templates
+4. **Note assumptions** you're making
+5. **Ask for clarification** if needed
+
+## Version Information
+
+This is the initial version of the Incremental Development MDC system designed for:
+- Rust development with clean architecture
+- Memory-driven incremental development
+- Feature-based organization
+- Comprehensive documentation tracking
+
+The system will evolve based on usage patterns and user feedback.

@@ -1,0 +1,249 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Project Structure & Workflow
+
+## Required Directory Structure
+
+Your project must follow this specific structure:
+
+```
+project-root/
+├── .cursor/
+│   └── rules/
+│       ├── core.mdc
+│       ├── rust-standards.mdc
+│       ├── project-structure.mdc
+│       ├── feature-workflow.mdc
+│       └── changelog-manager.mdc
+├── docs/
+│   ├── architecture.md
+│   ├── decisions/
+│   └── api/
+├── implementation/
+│   ├── changelog.md
+│   └── features/
+│       └── {current-feature}/
+│           ├── design.md
+│           ├── task.md
+│           └── src/
+└── src/
+    ├── main.rs
+    ├── lib.rs
+    └── ...
+```
+
+## Initialization Workflow
+
+### For New Projects (Greenfield)
+
+1. **Check changelog.md** - If empty or doesn't exist, this is greenfield
+2. **Create base structure**:
+   ```bash
+   mkdir -p implementation/features
+   mkdir -p docs/{decisions,api}
+   touch implementation/changelog.md
+   ```
+3. **Initialize first feature** based on requirements
+4. **Create design.md and task.md** for the feature
+
+### For Existing Projects
+
+1. **Read implementation/changelog.md** - Understand the sequence of changes
+2. **Review docs/ folder** - Understand project context and decisions
+3. **Analyze current feature** - Read design.md and task.md
+4. **Assess progress** - Understand what's been implemented vs what's planned
+
+## Feature Structure
+
+Each feature follows this pattern:
+
+```
+implementation/features/{feature-name}/
+├── design.md          # Context and requirements
+├── task.md           # Implementation breakdown
+└── src/              # Feature implementation (if separate)
+```
+
+### design.md Template
+
+```markdown
+# Feature: {Feature Name}
+
+## Context
+Brief description of why this feature is needed.
+
+## Requirements
+### Functional Requirements
+- Requirement 1
+- Requirement 2
+
+### Non-Functional Requirements  
+- Performance requirements
+- Security requirements
+- Scalability requirements
+
+## Constraints
+- Technical constraints
+- Business constraints
+- Time constraints
+
+## Success Criteria
+- How do we know this is complete?
+- What does success look like?
+
+## Dependencies
+- Other features this depends on
+- External dependencies
+- Team dependencies
+
+## Risks & Mitigation
+- Risk 1: Description and mitigation strategy
+- Risk 2: Description and mitigation strategy
+```
+
+### task.md Template
+
+```markdown
+# Implementation Tasks: {Feature Name}
+
+## Overview
+Brief summary of implementation approach.
+
+## Task Breakdown
+
+### Phase 1: Foundation
+- [ ] Task 1.1: Description (Estimate: Xh)
+- [ ] Task 1.2: Description (Estimate: Xh)
+
+### Phase 2: Core Implementation  
+- [ ] Task 2.1: Description (Estimate: Xh)
+- [ ] Task 2.2: Description (Estimate: Xh)
+
+### Phase 3: Integration & Testing
+- [ ] Task 3.1: Description (Estimate: Xh)
+- [ ] Task 3.2: Description (Estimate: Xh)
+
+## Technical Decisions
+
+### Decision 1: Title
+- **Options**: A, B, C
+- **Choice**: B
+- **Rationale**: Why B was chosen
+- **Trade-offs**: What we gained/lost
+
+### Decision 2: Title
+- **Options**: X, Y, Z  
+- **Choice**: Y
+- **Rationale**: Why Y was chosen
+- **Trade-offs**: What we gained/lost
+
+## Implementation Notes
+- Important implementation details
+- Gotchas to watch out for
+- Performance considerations
+
+## Testing Strategy
+- Unit test approach
+- Integration test approach
+- Manual testing checklist
+
+## Definition of Done
+- [ ] All tasks completed
+- [ ] Tests written and passing
+- [ ] Documentation updated
+- [ ] Code reviewed
+- [ ] Performance requirements met
+```
+
+## Changelog Management
+
+The `implementation/changelog.md` file tracks all changes:
+
+```markdown
+# Implementation Changelog
+
+## {Date} - {Feature Name} - {Version}
+
+### Added
+- New functionality added
+
+### Changed  
+- Existing functionality changed
+
+### Fixed
+- Bugs fixed
+
+### Removed
+- Functionality removed
+
+### Technical Decisions
+- Key architectural decisions made
+- Rationale for major changes
+
+### Next Steps
+- What should be worked on next
+- Dependencies for future work
+
+---
+
+## {Previous Date} - {Previous Feature} - {Previous Version}
+...
+```
+
+## Workflow Rules
+
+### Before Starting Work
+
+1. **Always read changelog.md first**
+2. **Understand current project state**  
+3. **Review current feature's design.md and task.md**
+4. **Identify what's already implemented**
+
+### During Implementation
+
+1. **Update task.md** as you complete tasks
+2. **Document decisions** in task.md
+3. **Keep notes** of issues encountered
+4. **Test incrementally** as you build
+
+### After Completing Work
+
+1. **Update changelog.md** with summary of changes
+2. **Mark completed tasks** in task.md  
+3. **Document any new technical decisions**
+4. **Identify next steps** for future work
+
+## Feature Transition Guidelines
+
+### Starting a New Feature
+
+1. Create new feature directory: `implementation/features/{new-feature}/`
+2. Create design.md with requirements and context
+3. Create task.md with implementation breakdown
+4. Update changelog.md with new feature start
+
+### Completing a Feature
+
+1. Ensure all tasks in task.md are marked complete
+2. Update changelog.md with completion summary
+3. Document lessons learned and technical decisions
+4. Identify next feature or improvements needed
+
+### Switching Between Features
+
+1. Update current feature's task.md with progress
+2. Add checkpoint entry to changelog.md
+3. Review new feature's design.md and task.md
+4. Understand dependencies between features
+
+## Best Practices
+
+1. **Keep changelog.md updated** - It's your source of truth
+2. **Be specific in task breakdown** - Avoid vague tasks
+3. **Document decisions and rationale** - Future you will thank you
+4. **Test incrementally** - Don't leave testing until the end
+5. **Review and refactor** - Keep code quality high
+6. **Communicate changes** - Update documentation as you go

@@ -1,0 +1,414 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Feature Development Workflow
+
+## Feature Lifecycle
+
+### 1. Feature Analysis Phase
+
+**ALWAYS START HERE** - Before writing any code:
+
+1. **Read `implementation/changelog.md`**
+   - Empty = Greenfield project
+   - Has content = Existing project with history
+   
+2. **If Existing Project**:
+   - Understand sequence of previous changes
+   - Identify established patterns and conventions
+   - Note any technical debt or known issues
+   - Understand current architecture decisions
+
+3. **Review Documentation**:
+   - Read `docs/` folder for project context
+   - Check `docs/decisions/` for architectural decisions
+   - Review API documentation if applicable
+
+4. **Analyze Current Feature**:
+   - Read `implementation/features/{current}/design.md`
+   - Review `implementation/features/{current}/task.md`  
+   - Understand requirements and constraints
+   - Identify what's already implemented
+
+### 2. Planning Phase
+
+**Before implementing anything**:
+
+1. **Understand the Request**:
+   - What specific functionality is needed?
+   - How does it fit with existing features?
+   - What are the acceptance criteria?
+
+2. **Update/Create Feature Documentation**:
+   - Update `design.md` if requirements changed
+   - Break down work in `task.md`
+   - Identify dependencies and risks
+   - Estimate effort for each task
+
+3. **Technical Planning**:
+   - Choose appropriate Rust patterns
+   - Plan data structures and APIs
+   - Consider error handling strategy
+   - Plan testing approach
+
+### 3. Implementation Phase
+
+**Incremental development approach**:
+
+1. **Start Small**:
+   - Implement one task at a time
+   - Test each increment before moving on
+   - Update `task.md` as you complete tasks
+
+2. **Follow Rust Standards**:
+   - Apply idiomatic Rust patterns
+   - Use functional programming approach
+   - Implement clean architecture
+   - Create appropriate DTOs and domain objects
+
+3. **Document as You Go**:
+   - Add inline documentation
+   - Update technical decisions in `task.md`
+   - Note any deviations from original plan
+
+### 4. Integration Phase
+
+**Bringing it all together**:
+
+1. **Integration Testing**:
+   - Test feature with existing system
+   - Verify API contracts
+   - Check performance requirements
+
+2. **Documentation Updates**:
+   - Update `docs/api/` if APIs changed
+   - Add examples and usage guides
+   - Update architecture docs if needed
+
+### 5. Completion Phase
+
+**Wrapping up the feature**:
+
+1. **Final Updates**:
+   - Mark all tasks complete in `task.md`
+   - Update `implementation/changelog.md`
+   - Document lessons learned
+
+2. **Handoff Information**:
+   - What should be worked on next?
+   - Any known issues or technical debt?
+   - Dependencies for future features?
+
+## Rust Implementation Patterns
+
+### Domain-Driven Feature Structure
+
+```rust
+// implementation/features/{feature}/src/
+pub mod domain {
+    pub mod entities;
+    pub mod value_objects;
+    pub mod services;
+    pub mod events;
+}
+
+pub mod application {
+    pub mod commands;
+    pub mod queries;
+    pub mod handlers;
+    pub mod dto;
+}
+
+pub mod infrastructure {
+    pub mod persistence;
+    pub mod external_services;
+}
+
+pub mod presentation {
+    pub mod rest;
+    pub mod cli;
+}
+```
+
+### Feature Module Template
+
+```rust
+// lib.rs for the feature
+pub mod domain;
+pub mod application;
+pub mod infrastructure;
+pub mod presentation;
+
+// Re-export public API
+pub use application::dto::{CreateRequest, Response};
+pub use application::handlers::{CreateHandler, QueryHandler};
+pub use domain::entities::FeatureEntity;
+
+// Feature configuration
+#[derive(Debug, Clone)]
+pub struct FeatureConfig {
+    pub database_url: String,
+    pub cache_ttl: Duration,
+}
+
+// Feature builder for integration
+pub struct FeatureBuilder {
+    config: FeatureConfig,
+}
+
+impl FeatureBuilder {
+    pub fn new(config: FeatureConfig) -> Self {
+        Self { config }
+    }
+    
+    pub fn build(self) -> Result<FeatureModule, BuildError> {
+        // Initialize and return feature module
+    }
+}
+```
+
+### Error Handling Pattern
+
+```rust
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum FeatureError {
+    #[error("Validation error: {field} - {message}")]
+    Validation { field: String, message: String },
+    
+    #[error("Entity not found: {entity_type} with id {id}")]
+    NotFound { entity_type: String, id: String },
+    
+    #[error("Business rule violation: {rule}")]
+    BusinessRule { rule: String },
+    
+    #[error("Infrastructure error: {0}")]
+    Infrastructure(#[from] InfrastructureError),
+}
+
+pub type FeatureResult<T> = Result<T, FeatureError>;
+```
+
+## API Development Patterns
+
+### REST API Implementation
+
+```rust
+// presentation/rest.rs
+use axum::{
+    extract::{Path, Query, State},
+    http::StatusCode,
+    response::Json,
+    routing::{get, post},
+    Router,
+};
+
+pub fn feature_routes() -> Router<AppState> {
+    Router::new()
+        .route("/api/features", post(create_feature).get(list_features))
+        .route("/api/features/:id", get(get_feature).put(update_feature))
+}
+
+async fn create_feature(
+    State(state): State<AppState>,
+    Json(request): Json<CreateFeatureRequest>,
+) -> Result<Json<FeatureResponse>, AppError> {
+    let command = CreateFeatureCommand::from(request);
+    let result = state.feature_handler.create(command).await?;
+    Ok(Json(FeatureResponse::from(result)))
+}
+```
+
+### CLI Implementation
+
+```rust
+// presentation/cli.rs
+use clap::{Args, Subcommand};
+
+#[derive(Subcommand)]
+pub enum FeatureCommands {
+    Create(CreateArgs),
+    List(ListArgs),
+    Show { id: String },
+    Update(UpdateArgs),
+}
+
+#[derive(Args)]
+pub struct CreateArgs {
+    #[arg(short, long)]
+    pub name: String,
+    
+    #[arg(short, long)]
+    pub description: Option<String>,
+}
+
+pub async fn handle_feature_command(
+    cmd: FeatureCommands,
+    handler: &FeatureHandler,
+) -> Result<(), CliError> {
+    match cmd {
+        FeatureCommands::Create(args) => {
+            let command = CreateFeatureCommand {
+                name: args.name,
+                description: args.description,
+            };
+            let result = handler.create(command).await?;
+            println!("Created feature: {}", result.id);
+        }
+        // ... other commands
+    }
+    Ok(())
+}
+```
+
+### GraphQL Implementation
+
+```rust
+// presentation/graphql.rs
+use async_graphql::{Context, Object, Result, SimpleObject};
+
+#[derive(SimpleObject)]
+pub struct Feature {
+    pub id: String,
+    pub name: String,
+    pub description: Option<String>,
+    pub created_at: String,
+}
+
+pub struct FeatureQuery;
+
+#[Object]
+impl FeatureQuery {
+    async fn features(
+        &self,
+        ctx: &Context<'_>,
+        limit: Option<i32>,
+        offset: Option<i32>,
+    ) -> Result<Vec<Feature>> {
+        let handler = ctx.data::<FeatureHandler>()?;
+        let query = ListFeaturesQuery { limit, offset };
+        let results = handler.list(query).await?;
+        Ok(results.into_iter().map(Feature::from).collect())
+    }
+}
+
+pub struct FeatureMutation;
+
+#[Object]
+impl FeatureMutation {
+    async fn create_feature(
+        &self,
+        ctx: &Context<'_>,
+        input: CreateFeatureInput,
+    ) -> Result<Feature> {
+        let handler = ctx.data::<FeatureHandler>()?;
+        let command = CreateFeatureCommand::from(input);
+        let result = handler.create(command).await?;
+        Ok(Feature::from(result))
+    }
+}
+```
+
+## Testing Strategy
+
+### Unit Test Structure
+
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    mod domain {
+        use super::*;
+        
+        #[test]
+        fn test_feature_creation() {
+            // Test domain logic
+        }
+        
+        #[test]
+        fn test_business_rules() {
+            // Test business rule validation
+        }
+    }
+    
+    mod application {
+        use super::*;
+        
+        #[tokio::test]
+        async fn test_create_feature_handler() {
+            // Test application layer
+        }
+    }
+}
+```
+
+### Integration Test Pattern
+
+```rust
+// tests/feature_integration_tests.rs
+use sqlx::PgPool;
+use testcontainers::clients::Cli;
+
+#[tokio::test]
+async fn test_complete_feature_workflow() {
+    let docker = Cli::default();
+    let container = docker.run(postgres_image);
+    let pool = create_test_pool(&container).await;
+    
+    // Test complete workflow
+    let feature_handler = create_feature_handler(pool).await;
+    
+    // Create
+    let create_command = CreateFeatureCommand { /* ... */ };
+    let created = feature_handler.create(create_command).await.unwrap();
+    
+    // Read
+    let retrieved = feature_handler.get(created.id.clone()).await.unwrap();
+    assert_eq!(created.id, retrieved.id);
+    
+    // Update
+    let update_command = UpdateFeatureCommand { /* ... */ };
+    let updated = feature_handler.update(update_command).await.unwrap();
+    
+    // List
+    let list_query = ListFeaturesQuery { limit: None, offset: None };
+    let list_result = feature_handler.list(list_query).await.unwrap();
+    assert!(list_result.len() > 0);
+}
+```
+
+## Progress Tracking Rules
+
+### Task Completion Tracking
+
+- Mark tasks as complete in `task.md`: `- [x] Task description`
+- Add completion notes if implementation differed from plan
+- Update estimates if actual time was significantly different
+
+### Changelog Updates
+
+- Add entry for each significant milestone
+- Include both what was implemented and key decisions made
+- Note any technical debt or future improvements needed
+
+### Documentation Maintenance
+
+- Keep `design.md` updated if requirements evolve
+- Document any architectural changes in `docs/decisions/`
+- Update API documentation for any interface changes
+
+## Quality Gates
+
+Before considering a feature complete:
+
+1. **All tasks marked complete** in `task.md`
+2. **Tests written and passing** (unit + integration)
+3. **Documentation updated** (inline + external docs)
+4. **Changelog updated** with summary and next steps
+5. **Code follows Rust standards** from rust-standards.mdc
+6. **Performance requirements met** (if applicable)
+7. **Security requirements addressed** (if applicable)

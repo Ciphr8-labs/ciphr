@@ -1,0 +1,365 @@
+---
+description: 
+globs: *.rs
+alwaysApply: false
+---
+# Rust Coding Standards & Best Practices
+
+## Core Principles
+
+### Idiomatic Rust
+- Use `snake_case` for functions, variables, modules
+- Use `PascalCase` for types, traits, enums
+- Use `SCREAMING_SNAKE_CASE` for constants
+- Prefer `&str` over `String` for parameters
+- Use `impl Trait` for return types when appropriate
+- Leverage the type system for compile-time guarantees
+
+### Functional Programming
+- Prefer iterators over loops: `.map()`, `.filter()`, `.fold()`, `.collect()`
+- Use combinators: `.and_then()`, `.or_else()`, `.unwrap_or_else()`
+- Minimize mutable state - prefer immutable data structures
+- Use closures and higher-order functions
+- Leverage `Option` and `Result` for error handling
+
+### Clean Code
+- Functions should do one thing well
+- Keep functions small (ideally < 20 lines)
+- Use descriptive names that express intent
+- Avoid deep nesting - prefer early returns
+- Use `#[must_use]` for important return values
+- Document public APIs with `///` comments
+
+## Architecture Patterns
+
+### Explicit Architecture
+```rust
+// Domain layer - core business logic
+pub mod domain {
+    pub mod entities;
+    pub mod value_objects;
+    pub mod services;
+    pub mod repositories; // traits only
+}
+
+// Application layer - use cases
+pub mod application {
+    pub mod use_cases;
+    pub mod commands;
+    pub mod queries;
+    pub mod dto;
+}
+
+// Infrastructure layer - external concerns
+pub mod infrastructure {
+    pub mod persistence;
+    pub mod web;
+    pub mod cli;
+    pub mod config;
+}
+
+// Presentation layer
+pub mod presentation {
+    pub mod rest;
+    pub mod graphql;
+    pub mod tui;
+    pub mod cli;
+}
+```
+
+### Domain-Driven Design
+- Rich domain models with behavior
+- Value objects for primitive obsession
+- Aggregates for consistency boundaries
+- Domain services for cross-entity logic
+- Repository pattern for data access abstraction
+
+### DTOs (Data Transfer Objects)
+```rust
+// Request/Response DTOs
+#[derive(Debug, Serialize, Deserialize)]
+pub struct CreateUserRequest {
+    pub email: String,
+    pub name: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct UserResponse {
+    pub id: String,
+    pub email: String,
+    pub name: String,
+    pub created_at: String,
+}
+
+// Command/Query DTOs
+#[derive(Debug)]
+pub struct CreateUserCommand {
+    pub email: Email, // Value object
+    pub name: Name,   // Value object
+}
+```
+
+## Data Structure Design
+
+### Clean Data Structures
+```rust
+// Use newtype pattern for domain primitives
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct UserId(Uuid);
+
+#[derive(Debug, Clone)]
+pub struct Email(String);
+
+impl Email {
+    pub fn new(email: String) -> Result<Self, EmailError> {
+        // validation logic
+        Ok(Email(email))
+    }
+}
+
+// Rich enums with behavior
+#[derive(Debug, Clone)]
+pub enum UserStatus {
+    Active { verified_at: DateTime<Utc> },
+    Inactive { reason: String },
+    Suspended { until: DateTime<Utc> },
+}
+
+impl UserStatus {
+    pub fn can_login(&self) -> bool {
+        matches!(self, UserStatus::Active { .. })
+    }
+}
+```
+
+### Builder Pattern for Complex Objects
+```rust
+#[derive(Debug)]
+pub struct User {
+    id: UserId,
+    email: Email,
+    status: UserStatus,
+}
+
+pub struct UserBuilder {
+    id: Option<UserId>,
+    email: Option<Email>,
+    status: Option<UserStatus>,
+}
+
+impl UserBuilder {
+    pub fn new() -> Self {
+        Self::default()
+    }
+    
+    pub fn id(mut self, id: UserId) -> Self {
+        self.id = Some(id);
+        self
+    }
+    
+    pub fn build(self) -> Result<User, BuildError> {
+        // validation and construction
+    }
+}
+```
+
+## API Design Principles
+
+### REST APIs
+```rust
+// Use axum/warp with proper error handling
+use axum::{
+    extract::{Path, Query, State},
+    http::StatusCode,
+    response::{IntoResponse, Json},
+    routing::{get, post},
+    Router,
+};
+
+// Resource-based routing
+pub fn user_routes() -> Router<AppState> {
+    Router::new()
+        .route("/users", post(create_user).get(list_users))
+        .route("/users/:id", get(get_user).put(update_user).delete(delete_user))
+}
+
+// Proper error responses
+#[derive(Debug, Serialize)]
+pub struct ErrorResponse {
+    pub error: String,
+    pub code: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details: Option<serde_json::Value>,
+}
+```
+
+### GraphQL APIs
+```rust
+// Use async-graphql with proper schema design
+use async_graphql::{Context, Object, Result, Schema, SimpleObject};
+
+#[derive(SimpleObject)]
+pub struct User {
+    pub id: String,
+    pub email: String,
+    pub name: String,
+}
+
+pub struct QueryRoot;
+
+#[Object]
+impl QueryRoot {
+    async fn users(&self, ctx: &Context<'_>) -> Result<Vec<User>> {
+        // Implementation with proper error handling
+    }
+    
+    async fn user(&self, ctx: &Context<'_>, id: String) -> Result<Option<User>> {
+        // Implementation
+    }
+}
+```
+
+### CLI Design
+```rust
+// Use clap with structured commands
+use clap::{Parser, Subcommand};
+
+#[derive(Parser)]
+#[command(name = "myapp")]
+#[command(about = "A CLI application")]
+pub struct Cli {
+    #[command(subcommand)]
+    pub command: Commands,
+}
+
+#[derive(Subcommand)]
+pub enum Commands {
+    Create {
+        #[arg(short, long)]
+        name: String,
+        #[arg(short, long)]
+        email: String,
+    },
+    List {
+        #[arg(short, long, default_value = "10")]
+        limit: usize,
+    },
+}
+```
+
+### TUI Design
+```rust
+// Use ratatui with proper state management
+use ratatui::{
+    backend::Backend,
+    layout::{Constraint, Direction, Layout},
+    style::{Color, Modifier, Style},
+    text::{Line, Span},
+    widgets::{Block, Borders, List, ListItem, Paragraph},
+    Frame,
+};
+
+pub struct App {
+    pub state: AppState,
+    pub input: String,
+    pub messages: Vec<String>,
+}
+
+impl App {
+    pub fn new() -> Self {
+        Self {
+            state: AppState::default(),
+            input: String::new(),
+            messages: Vec::new(),
+        }
+    }
+    
+    pub fn render<B: Backend>(&mut self, f: &mut Frame<B>) {
+        // Proper layout and rendering
+    }
+}
+```
+
+## Error Handling
+
+### Custom Error Types
+```rust
+use thiserror::Error;
+
+#[derive(Error, Debug)]
+pub enum UserError {
+    #[error("User not found with id: {id}")]
+    NotFound { id: String },
+    
+    #[error("Invalid email format: {email}")]
+    InvalidEmail { email: String },
+    
+    #[error("Database error: {0}")]
+    Database(#[from] sqlx::Error),
+    
+    #[error("Validation error: {field}")]
+    Validation { field: String },
+}
+
+// Result type alias
+pub type UserResult<T> = Result<T, UserError>;
+```
+
+## Testing Standards
+
+### Unit Tests
+```rust
+#[cfg(test)]
+mod tests {
+    use super::*;
+    
+    #[test]
+    fn test_email_validation() {
+        let valid_email = Email::new("test@example.com".to_string());
+        assert!(valid_email.is_ok());
+        
+        let invalid_email = Email::new("invalid".to_string());
+        assert!(invalid_email.is_err());
+    }
+}
+```
+
+### Integration Tests
+```rust
+// tests/integration_tests.rs
+use sqlx::PgPool;
+use testcontainers::clients::Cli;
+
+#[tokio::test]
+async fn test_user_creation() {
+    let docker = Cli::default();
+    let container = docker.run(postgres_image);
+    let pool = create_pool(&container).await;
+    
+    // Test implementation
+}
+```
+
+## Code Organization Rules
+
+1. **One concept per file** - Don't mix domain entities with infrastructure
+2. **Clear module boundaries** - Each module should have a single responsibility  
+3. **Dependency inversion** - High-level modules don't depend on low-level modules
+4. **Interface segregation** - Many specific traits are better than one general trait
+5. **Open/closed principle** - Open for extension, closed for modification
+
+## Performance Considerations
+
+- Use `&[T]` instead of `Vec<T>` for parameters when you don't need ownership
+- Prefer `Cow<str>` when you might need either borrowed or owned strings
+- Use `Box<dyn Trait>` for trait objects when size matters
+- Consider `Arc<T>` for shared immutable data
+- Use `tokio::spawn` judiciously - not every async operation needs a new task
+
+## Documentation Standards
+
+- Every public function, struct, enum should have documentation
+- Include examples in documentation when helpful
+- Document panics, errors, and safety requirements
+- Use `cargo doc` to generate and review documentation
+- Keep documentation up to date with implementation changes
