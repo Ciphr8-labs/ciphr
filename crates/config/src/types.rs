@@ -2,18 +2,26 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::fmt;
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]
 #[serde(rename_all = "lowercase")]
 pub enum LogLevel {
+    Trace,
     Debug,
     Info,
     Warn,
     Error,
 }
 
+impl Default for LogLevel {
+    fn default() -> Self {
+        LogLevel::Info
+    }
+}
+
 impl fmt::Display for LogLevel {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            LogLevel::Trace => write!(f, "trace"),
             LogLevel::Debug => write!(f, "debug"),
             LogLevel::Info => write!(f, "info"),
             LogLevel::Warn => write!(f, "warn"),
