@@ -1,0 +1,26 @@
+# .github/labeler.yml
+
+"area:config":
+  - crates/config/**/*
+
+"area:logging":
+  - crates/logging/**/*
+
+"area:feature-flags":
+  - crates/feature-flags/**/*
+
+"area:testing":
+  - crates/test-utils/**/*
+
+"area:monitoring":
+  - crates/monitoring/**/*
+
+"area:cli":
+  - crates/cli/**/*
+
+"area:docs":
+  - docs/**/*
+  - README.md
+
+"area:ci":
+  - .github/workflows/**/* 
