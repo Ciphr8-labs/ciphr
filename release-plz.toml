@@ -1,0 +1,10 @@
+# release-plz.toml
+
+[workspace]
+# The name of the package to build artifacts for.
+# This is the name of the binary that will be generated.
+artifacts = ["cli"]
+
+# The list of targets to build artifacts for.
+# These should be valid rustc targets.
+targets = ["x86_64-unknown-linux-gnu", "x86_64-apple-darwin", "x86_64-pc-windows-msvc"] 
