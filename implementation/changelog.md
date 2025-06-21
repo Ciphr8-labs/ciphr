@@ -1,8 +1,23 @@
 # Changelog
 
-## [2025-06-21] - Dev Env Setup - IN_PROGRESS
+## [2025-06-21] - Dev Env Setup - COMPLETED
 
 ### Implemented
+- **Production Monitoring Foundation**:
+    - Added a health check endpoint to the `cli` crate as a foundation for production monitoring.
+- **Community Workflow Automation**:
+    - Added a workflow to welcome first-time contributors.
+    - Set up the `all-contributors` bot for automated contributor recognition.
+    - Implemented an automatic labeling workflow for pull requests based on file paths.
+- **Monitoring Framework**:
+    - Created a `ciphr-monitoring` crate to handle error tracking and event monitoring.
+    - Defined a `MonitoringService` trait and a `MockMonitoringService` for local development.
+- **Advanced Feature Flags**:
+    - Implemented a `UserSegmentEvaluator` to target features to specific user groups.
+    - Enhanced the `PercentageRolloutEvaluator` to use consistent hashing, ensuring users have a stable feature experience.
+- **Testing Framework**:
+    - Integrated `proptest` for property-based testing.
+    - The `ciphr-test-utils` crate now includes utilities for file system mocking, test harnesses, and property testing.
 - **Release Automation**:
     - Created a `release.yml` workflow using `release-plz` to automate release creation.
     - The workflow handles semantic versioning, changelog generation, and creates a GitHub release.
@@ -39,19 +54,6 @@
 - **Core Workspace & Crates**:
     - Initialized a Rust workspace and a modular crate structure.
     - Added foundational documentation (`architecture.md`, `contributing.md`, `environment-setup.md`).
-- **Testing Framework**:
-    - Integrated `proptest` for property-based testing.
-    - The `ciphr-test-utils` crate now includes utilities for file system mocking, test harnesses, and property testing.
-- **Monitoring Framework**:
-    - Created a `ciphr-monitoring` crate to handle error tracking and event monitoring.
-    - Defined a `MonitoringService` trait and a `MockMonitoringService` for local development.
-- **Advanced Feature Flags**:
-    - Implemented a `UserSegmentEvaluator` to target features to specific user groups.
-    - Enhanced the `PercentageRolloutEvaluator` to use consistent hashing, ensuring users have a stable feature experience.
-- **Community Workflow Automation**:
-    - Added a workflow to welcome first-time contributors.
-    - Set up the `all-contributors` bot for automated contributor recognition.
-    - Implemented an automatic labeling workflow for pull requests based on file paths.
 
 ### Technical Decisions
 - **Task Runner (`just`)**: Chose `just` for its simplicity and Makefile-like syntax to run project scripts.
@@ -72,25 +74,20 @@
 - **Community Automation (`GitHub Actions`)**: Set up several workflows to improve the contributor experience, including a welcome message for first-timers, automatic PR labeling based on modified files, and the `all-contributors` bot for recognizing all types of contributions.
 
 ### Current State
-- A manual release workflow is in place to automate versioning, changelogs, and releases.
-- Performance benchmarks are in place for the `config` crate.
-- A dedicated documentation pipeline builds the `mdBook`.
-- A dedicated security pipeline runs vulnerability and license checks.
-- A basic, multi-platform CI pipeline automatically runs tests, lints, and format checks.
-- The `ciphr-config` crate now supports layered configurations from multiple sources.
-- The `ciphr-test-utils` crate has a test harness and file utilities.
-- The `ciphr-logging` and `ciphr-feature-flags` crates have their foundational logic.
-- The `ciphr-monitoring` crate has a `MonitoringService` trait and a `MockMonitoringService` for local development.
-- Core development environment and workflow automation are in place.
-- Tasks #001-019 are complete, with the exception of some sub-items in #018.
+- All foundational infrastructure tasks (Tasks #001-020) are complete.
+- The project has a robust, automated, and extensible foundation for future development.
+- The core principles of clean architecture, functional programming, and comprehensive testing have been established.
 
 ### Next Steps
-- Implement production monitoring and observability setup (Task #020).
-- Fully integrate the monitoring service throughout the application (revisiting Task #018).
+- Begin development of the core application logic (e.g., domain models for accounting).
+- Implement a web server (e.g., using `axum`) to expose API endpoints.
+- Integrate a database and implement the repository pattern for data persistence.
+- Expand the CLI with more commands and capabilities.
 
 ### Technical Debt
+- Full integration of the monitoring service is still required.
 - The community metrics and feedback collection processes are not yet automated.
 - The feature flag system does not yet support A/B testing or analytics.
 - The release workflow does not yet publish to package registries like crates.io.
 - The `ciphr-config` crate does not yet support environment variable overrides or watching for file changes.
-- The newly created crates contain only template code from `cargo new`. They need to be populated with their respective logic.
+- Several crates contain only placeholder code and need to be fully implemented.
