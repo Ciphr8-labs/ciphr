@@ -39,6 +39,9 @@
 - **Core Workspace & Crates**:
     - Initialized a Rust workspace and a modular crate structure.
     - Added foundational documentation (`architecture.md`, `contributing.md`, `environment-setup.md`).
+- **Testing Framework**:
+    - Integrated `proptest` for property-based testing.
+    - The `ciphr-test-utils` crate now includes utilities for file system mocking, test harnesses, and property testing.
 
 ### Technical Decisions
 - **Task Runner (`just`)**: Chose `just` for its simplicity and Makefile-like syntax to run project scripts.
@@ -54,6 +57,7 @@
 - **Test Harness (`ciphr-test-utils`)**: Implemented a `TestHarness` to provide isolated, temporary directories for file system-dependent tests.
 - **Benchmarking (`criterion`)**: Added `criterion` to the project to enable performance benchmarking. This will help identify and track performance regressions in critical code paths over time.
 - **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
+- **Testing Framework (`proptest`, `criterion`)**: Established a comprehensive testing foundation. `criterion` is used for performance benchmarking, and `proptest` is integrated for property-based testing, allowing for more robust and exhaustive tests.
 
 ### Current State
 - A manual release workflow is in place to automate versioning, changelogs, and releases.
@@ -65,11 +69,11 @@
 - The `ciphr-test-utils` crate has a test harness and file utilities.
 - The `ciphr-logging` and `ciphr-feature-flags` crates have their foundational logic.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #010, #011, #012, #013, #014, #015, and #016 are complete. Task #009 is in progress.
+- Tasks #001-005, #007, #008, #009, #010, #011, #012, #013, #014, #015, and #016 are complete.
 
 ### Next Steps
-- Continue implementation of the testing framework (Task #009).
 - Implement advanced feature flag capabilities (Task #017).
+- Implement error tracking and monitoring integration (Task #018).
 
 ### Technical Debt
 - The release workflow does not yet publish to package registries like crates.io.
