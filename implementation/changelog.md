@@ -48,6 +48,10 @@
 - **Advanced Feature Flags**:
     - Implemented a `UserSegmentEvaluator` to target features to specific user groups.
     - Enhanced the `PercentageRolloutEvaluator` to use consistent hashing, ensuring users have a stable feature experience.
+- **Community Workflow Automation**:
+    - Added a workflow to welcome first-time contributors.
+    - Set up the `all-contributors` bot for automated contributor recognition.
+    - Implemented an automatic labeling workflow for pull requests based on file paths.
 
 ### Technical Decisions
 - **Task Runner (`just`)**: Chose `just` for its simplicity and Makefile-like syntax to run project scripts.
@@ -65,6 +69,7 @@
 - **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
 - **Testing Framework (`proptest`, `criterion`)**: Established a comprehensive testing foundation. `criterion` is used for performance benchmarking, and `proptest` is integrated for property-based testing, allowing for more robust and exhaustive tests.
 - **Monitoring (`Trait-based`)**: Established a trait-based approach for monitoring and error reporting (`MonitoringService`). This decouples the application from any specific monitoring service and allows for a mock implementation in tests.
+- **Community Automation (`GitHub Actions`)**: Set up several workflows to improve the contributor experience, including a welcome message for first-timers, automatic PR labeling based on modified files, and the `all-contributors` bot for recognizing all types of contributions.
 
 ### Current State
 - A manual release workflow is in place to automate versioning, changelogs, and releases.
@@ -77,13 +82,14 @@
 - The `ciphr-logging` and `ciphr-feature-flags` crates have their foundational logic.
 - The `ciphr-monitoring` crate has a `MonitoringService` trait and a `MockMonitoringService` for local development.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #009, #010, #011, #012, #013, #014, #015, #016, and #017 are complete. Task #018 is in progress.
+- Tasks #001-019 are complete, with the exception of some sub-items in #018.
 
 ### Next Steps
-- Enhance community contribution workflows (Task #019).
 - Implement production monitoring and observability setup (Task #020).
+- Fully integrate the monitoring service throughout the application (revisiting Task #018).
 
 ### Technical Debt
+- The community metrics and feedback collection processes are not yet automated.
 - The feature flag system does not yet support A/B testing or analytics.
 - The release workflow does not yet publish to package registries like crates.io.
 - The `ciphr-config` crate does not yet support environment variable overrides or watching for file changes.
