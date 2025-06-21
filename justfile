@@ -1,7 +1,7 @@
 # A collection of useful project-specific commands.
 
 # Default task runs a quick check
-default: check
+default: build
 
 # Lint all crates
 clippy:
@@ -33,7 +33,15 @@ clean:
 
 # Run security audit for dependencies
 audit:
-    cargo audit
+    @echo " auditing dependencies..."
+    @cargo audit
+
+# Setup development environment
+setup:
+    @echo " installing cargo tools..."
+    @cargo install cargo-audit
+    @cargo install cargo-deny
+    @cargo install mdbook
 
 # Generate documentation
 doc:

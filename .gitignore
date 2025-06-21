@@ -145,3 +145,7 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+
+# Additional changes from the code block
+.devbox
+/docs/book/book
