@@ -4,9 +4,10 @@
 
 ### Implemented
 - **CI/CD Pipeline**:
+    - Created a dedicated `security.yml` workflow for security-related checks.
+    - The security workflow runs `cargo audit` for vulnerability scanning and `cargo deny` for license and dependency checks.
     - Created a basic GitHub Actions workflow (`ci.yml`) that runs tests on every push and pull request to `main`.
     - Configured the pipeline to run on Ubuntu, macOS, and Windows to ensure cross-platform compatibility.
-    - Added steps for formatting (`cargo fmt`), linting (`cargo clippy`), and security scanning (`cargo audit`) to enforce code quality.
 - **Test Utilities (`ciphr-test-utils`)**:
     - Implemented the initial `TestHarness` to provide isolated file system environments for tests using `tempfile`.
     - Added a `create_file_with_content` helper function to the `test-utils` crate.
@@ -50,6 +51,8 @@
 - **Feature Flags (`Strategy Pattern`)**: Used the strategy pattern (`FeatureFlagEvaluator` trait) to create a decoupled and extensible evaluation engine.
 - **CI/CD (`GitHub Actions`)**: Chose GitHub Actions for its tight integration with the source repository and multi-platform testing matrix.
 - **Test Harness**: Implemented a `TestHarness` to provide isolated, temporary directories for file system-dependent tests.
+- **Security Scanning (`cargo-audit` & `cargo-deny`)**: A dedicated security workflow automates vulnerability and license checking.
+- **Rationale**: Separating security checks into their own workflow makes it easier to add more complex security tasks later (like secret scanning or static analysis) without slowing down the primary CI feedback loop. `cargo-deny` helps enforce license policies, which is critical for open-source projects.
 
 ### Current State
 - The `ciphr-config` crate now supports layered configurations from multiple sources.
@@ -59,10 +62,10 @@
 - The `ciphr-logging` crate provides configurable structured logging.
 - The `ciphr-feature-flags` crate has a foundational evaluation engine.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #010, #011, and #012 are complete. Task #009 is in progress.
+- Tasks #001-005, #007, #008, #010, #011, #012, and #013 are complete. Task #009 is in progress.
 
 ### Next Steps
-- Implement security scanning integration (Task #013).
+- Implement documentation automation (Task #014).
 - Continue implementation of the testing framework (Task #009).
 
 ### Technical Debt

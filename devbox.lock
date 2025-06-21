@@ -49,6 +49,10 @@
         }
       }
     },
+    "cargo-deny": {
+      "resolved": "github:NixOS/nixpkgs/3d1f29646e4b57ed468d60f9d286cde23a8d1707?narHash=sha256-B3BsCRbc%2Bx%2Fd0WiG1f%2BqfSLUy%2BoiIfih54kalWBi%2B%2FM%3D#cargo-deny",
+      "source": "nixpkg"
+    },
     "git@latest": {
       "last_modified": "2025-05-16T20:19:48Z",
       "resolved": "github:NixOS/nixpkgs/12a55407652e04dcf2309436eb06fef0d3713ef3#git",

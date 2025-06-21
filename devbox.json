@@ -3,7 +3,8 @@
     "rustup@latest",
     "just@latest",
     "git@latest",
-    "cargo-audit@latest"
+    "cargo-audit@latest",
+    "cargo-deny"
   ],
   "shell": {
     "init_hook": [
