@@ -49,9 +49,9 @@ impl AppConfigBuilder {
     /// been explicitly set.
     pub fn build(self) -> AppConfig {
         AppConfig {
-            environment: self.environment.unwrap_or_else(|| "development".to_string()),
-            log_level: self.log_level.unwrap_or(LogLevel::Info),
-            log_format: self.log_format.unwrap_or(LogFormat::Text),
+            environment: Some(self.environment.unwrap_or_else(|| "development".to_string())),
+            log_level: Some(self.log_level.unwrap_or(LogLevel::Info)),
+            log_format: Some(self.log_format.unwrap_or(LogFormat::Text)),
             feature_flags: self.feature_flags,
         }
     }
@@ -64,9 +64,9 @@ mod tests {
     #[test]
     fn test_builder_defaults() {
         let config = AppConfigBuilder::new().build();
-        assert_eq!(config.environment, "development");
-        assert_eq!(config.log_level, LogLevel::Info);
-        assert_eq!(config.log_format, LogFormat::Text);
+        assert_eq!(config.environment, Some("development".to_string()));
+        assert_eq!(config.log_level, Some(LogLevel::Info));
+        assert_eq!(config.log_format, Some(LogFormat::Text));
         assert!(config.feature_flags.is_empty());
     }
 
@@ -79,9 +79,9 @@ mod tests {
             .feature_flag("new_feature", true)
             .build();
 
-        assert_eq!(config.environment, "production");
-        assert_eq!(config.log_level, LogLevel::Debug);
-        assert_eq!(config.log_format, LogFormat::Json);
+        assert_eq!(config.environment, Some("production".to_string()));
+        assert_eq!(config.log_level, Some(LogLevel::Debug));
+        assert_eq!(config.log_format, Some(LogFormat::Json));
         assert_eq!(config.feature_flags.get("new_feature"), Some(&true));
     }
 } 

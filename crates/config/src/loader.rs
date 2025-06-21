@@ -1,8 +1,11 @@
-use std::path::{Path, PathBuf};
 use crate::{
     errors::ConfigError,
     traits::ConfigurationProvider,
-    types::AppConfig,
+    types::{AppConfig},
+};
+use std::{
+    fs, io,
+    path::{Path, PathBuf},
 };
 
 /// A configuration provider that loads settings from a TOML file.
@@ -23,27 +26,24 @@ impl FileConfigurationProvider {
 }
 
 impl ConfigurationProvider for FileConfigurationProvider {
-    fn load(&self) -> Result<AppConfig, ConfigError> {
-        let contents = std::fs::read_to_string(&self.path).map_err(|e| {
-            ConfigError::ReadError(format!(
-                "Failed to read file at {}: {}",
-                self.path.display(),
-                e
-            ))
-        })?;
-
-        let config: AppConfig = toml::from_str(&contents)
-            .map_err(|e| ConfigError::ParseError(e.to_string()))?;
-        
-        Ok(config)
+    fn load(&self) -> Result<Option<AppConfig>, ConfigError> {
+        match fs::read_to_string(&self.path) {
+            Ok(contents) => {
+                let config: AppConfig = toml::from_str(&contents)?;
+                Ok(Some(config))
+            }
+            Err(e) if e.kind() == io::ErrorKind::NotFound => Ok(None),
+            Err(e) => Err(e.into()),
+        }
     }
 
     fn validate(&self, config: &AppConfig) -> Result<(), ConfigError> {
-        if config.environment.is_empty() {
-            return Err(ConfigError::ValidationError {
-                field: "environment".to_string(),
-                message: "cannot be empty".to_string(),
-            });
+        if let Some(env) = &config.environment {
+            if env.is_empty() {
+                return Err(ConfigError::ValidationError {
+                    field: "environment".to_string(),
+                });
+            }
         }
         Ok(())
     }
@@ -52,8 +52,15 @@ impl ConfigurationProvider for FileConfigurationProvider {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use tempfile::NamedTempFile;
+    use crate::types::{LogFormat, LogLevel};
     use std::io::Write;
+    use tempfile::NamedTempFile;
+
+    fn create_temp_config_file(content: &str) -> NamedTempFile {
+        let mut file = NamedTempFile::new().unwrap();
+        write!(file, "{}", content).unwrap();
+        file
+    }
 
     #[test]
     fn test_load_valid_config() {
@@ -64,15 +71,14 @@ mod tests {
             [feature_flags]
             new_ui = true
         "#;
-        let mut file = NamedTempFile::new().unwrap();
-        write!(file, "{}", content).unwrap();
+        let file = create_temp_config_file(content);
 
         let provider = FileConfigurationProvider::new(file.path());
-        let config = provider.load().unwrap();
+        let config = provider.load().unwrap().unwrap();
 
-        assert_eq!(config.environment, "production");
-        assert_eq!(config.log_level, crate::types::LogLevel::Debug);
-        assert_eq!(config.log_format, crate::types::LogFormat::Json);
+        assert_eq!(config.environment, Some("production".to_string()));
+        assert_eq!(config.log_level, Some(LogLevel::Debug));
+        assert_eq!(config.log_format, Some(LogFormat::Json));
         assert_eq!(config.feature_flags.get("new_ui"), Some(&true));
     }
 
@@ -80,33 +86,48 @@ mod tests {
     fn test_load_non_existent_file() {
         let provider = FileConfigurationProvider::new("non_existent_file.toml");
         let result = provider.load();
-        assert!(matches!(result, Err(ConfigError::ReadError(_))));
+        assert!(result.is_ok());
+        assert!(result.unwrap().is_none());
     }
 
     #[test]
     fn test_load_invalid_toml() {
         let content = "this is not valid toml";
-        let mut file = NamedTempFile::new().unwrap();
-        write!(file, "{}", content).unwrap();
+        let file = create_temp_config_file(content);
 
         let provider = FileConfigurationProvider::new(file.path());
         let result = provider.load();
-        assert!(matches!(result, Err(ConfigError::ParseError(_))));
+        assert!(matches!(result, Err(ConfigError::Toml(_))));
     }
 
     #[test]
     fn test_load_validation_error() {
         let content = r#"
             environment = ""
-            log_level = "info"
-            log_format = "text"
         "#;
-        let mut file = NamedTempFile::new().unwrap();
-        write!(file, "{}", content).unwrap();
+        let file = create_temp_config_file(content);
 
         let provider = FileConfigurationProvider::new(file.path());
-        let config = provider.load().unwrap();
+        let config = provider.load().unwrap().unwrap();
         let result = provider.validate(&config);
-        assert!(matches!(result, Err(ConfigError::ValidationError { .. })));
+        assert!(matches!(
+            result,
+            Err(ConfigError::ValidationError { .. })
+        ));
+    }
+
+    #[test]
+    fn test_load_development_config() {
+        let content = r#"
+             environment = "development"
+             log_level = "info"
+             log_format = "text"
+         "#;
+        let file = create_temp_config_file(content);
+
+        let provider = FileConfigurationProvider::new(file.path());
+        let config = provider.load().unwrap().unwrap();
+        assert_eq!(config.environment, Some("development".to_string()));
+        assert_eq!(config.log_level, Some(LogLevel::Info));
     }
 } 

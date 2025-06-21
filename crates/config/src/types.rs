@@ -30,24 +30,16 @@ pub enum LogFormat {
     Json,
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 pub struct AppConfig {
-    pub environment: String,
-    pub log_level: LogLevel,
-    pub log_format: LogFormat,
+    #[serde(default)]
+    pub environment: Option<String>,
+    #[serde(default)]
+    pub log_level: Option<LogLevel>,
+    #[serde(default)]
+    pub log_format: Option<LogFormat>,
     #[serde(default)]
     pub feature_flags: HashMap<String, bool>,
-}
-
-impl Default for AppConfig {
-    fn default() -> Self {
-        Self {
-            environment: "development".to_string(),
-            log_level: LogLevel::Info,
-            log_format: LogFormat::Text,
-            feature_flags: HashMap::new(),
-        }
-    }
 }
 
 #[cfg(test)]
@@ -57,9 +49,9 @@ mod tests {
     #[test]
     fn test_app_config_default() {
         let default_config = AppConfig::default();
-        assert_eq!(default_config.environment, "development");
-        assert_eq!(default_config.log_level, LogLevel::Info);
-        assert_eq!(default_config.log_format, LogFormat::Text);
+        assert_eq!(default_config.environment, None);
+        assert_eq!(default_config.log_level, None);
+        assert_eq!(default_config.log_format, None);
         assert!(default_config.feature_flags.is_empty());
     }
 } 

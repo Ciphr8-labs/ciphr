@@ -6,6 +6,7 @@
 
 pub mod builder;
 pub mod errors;
+pub mod layers;
 pub mod loader;
 pub mod traits;
 pub mod types;

@@ -11,6 +11,8 @@
     - Implemented the initial `TestHarness` to provide isolated file system environments for tests using `tempfile`.
     - Added a `create_file_with_content` helper function to the `test-utils` crate.
 - **Configuration Crate (`ciphr-config`)**:
+    - Implemented a `LayeredConfigurationProvider` to merge multiple configuration sources with a "last one wins" strategy.
+    - Refactored `AppConfig` fields to be `Option`-based to support more robust merging logic.
     - Implemented a fluent `AppConfigBuilder` to allow for programmatic and testable configuration construction.
     - Implemented a `FileConfigurationProvider` to load settings from TOML files.
     - Implemented core configuration types (`AppConfig`, `LogLevel`, `LogFormat`).
@@ -43,23 +45,24 @@
 - **Environment Management (`Devbox`)**: Chose Devbox to ensure a reproducible development environment powered by Nix.
 - **Architecture (`Modular Workspace`)**: Adopted a workspace structure with multiple crates to promote modularity and separation of concerns.
 - **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
-- **Configuration (`Trait-based & Builder`)**: Designed the config crate with a `ConfigurationProvider` trait for flexibility and a fluent `AppConfigBuilder` for ergonomic, testable construction.
+- **Configuration (`Trait-based & Builder`)**: Designed the config crate with a `ConfigurationProvider` trait for flexibility and a fluent `AppConfigBuilder` for ergonomic, testable construction. The trait-based design now supports layering, allowing multiple sources (e.g., files, environment variables) to be composed.
 - **Logging (`tracing`)**: Chose the `tracing` crate for structured, context-aware diagnostics suitable for modern observability platforms.
 - **Feature Flags (`Strategy Pattern`)**: Used the strategy pattern (`FeatureFlagEvaluator` trait) to create a decoupled and extensible evaluation engine.
 - **CI/CD (`GitHub Actions`)**: Chose GitHub Actions for its tight integration with the source repository and multi-platform testing matrix.
 - **Test Harness**: Implemented a `TestHarness` to provide isolated, temporary directories for file system-dependent tests.
 
 ### Current State
+- The `ciphr-config` crate now supports layered configurations from multiple sources.
 - A fluent builder is available for creating `AppConfig` instances.
 - A basic, multi-platform CI pipeline automatically runs tests, lints, and security scans.
 - The `ciphr-test-utils` crate has an initial test harness for isolated testing.
 - The `ciphr-logging` crate provides configurable structured logging.
 - The `ciphr-feature-flags` crate has a foundational evaluation engine.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #010, and #011 are complete. Task #009 is in progress.
+- Tasks #001-005, #007, #008, #010, #011, and #012 are complete. Task #009 is in progress.
 
 ### Next Steps
-- Implement environment-specific configuration overrides (Task #012).
+- Implement security scanning integration (Task #013).
 - Continue implementation of the testing framework (Task #009).
 
 ### Technical Debt

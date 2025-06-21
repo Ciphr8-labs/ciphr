@@ -1,15 +1,16 @@
 use thiserror::Error;
+use std::io;
 
 #[derive(Error, Debug)]
 pub enum ConfigError {
-    #[error("Failed to read configuration from path: {0}")]
-    ReadError(String),
+    #[error("Failed to read configuration: {0}")]
+    Io(#[from] io::Error),
 
-    #[error("Failed to parse configuration: {0}")]
-    ParseError(String),
+    #[error("Failed to parse TOML configuration: {0}")]
+    Toml(#[from] toml::de::Error),
 
-    #[error("Validation failed: {field}: {message}")]
-    ValidationError { field: String, message: String },
+    #[error("Validation failed: {field}")]
+    ValidationError { field: String },
 
     #[error("Configuration source not found: {0}")]
     NotFound(String),
