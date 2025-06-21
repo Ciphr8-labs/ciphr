@@ -3,6 +3,10 @@
 ## [2025-06-21] - Dev Env Setup - IN_PROGRESS
 
 ### Implemented
+- **Release Automation**:
+    - Created a `release.yml` workflow using `release-plz` to automate release creation.
+    - The workflow handles semantic versioning, changelog generation, and creates a GitHub release.
+    - Configured `release-plz.toml` to build the `cli` binary for Linux, macOS, and Windows.
 - **Performance Benchmarking**:
     - Set up `criterion` for performance benchmarking.
     - Added initial benchmarks for configuration loading and building.
@@ -40,6 +44,7 @@
 - **Task Runner (`just`)**: Chose `just` for its simplicity and Makefile-like syntax to run project scripts.
 - **Environment Management (`Devbox`)**: Chose Devbox to ensure a reproducible development environment powered by Nix.
 - **Architecture (`Modular Workspace`)**: Adopted a workspace structure with multiple crates to promote modularity and separation of concerns.
+- **Release Automation (`release-plz`)**: Chose `release-plz` to automate the release process for the workspace. It handles version calculation, changelog generation, and artifact creation, simplifying the process of creating consistent releases.
 - **Configuration (`Layered & Builder`)**: Designed the config crate with a `ConfigurationProvider` trait that supports layering and a fluent `AppConfigBuilder` for ergonomic construction.
 - **Logging (`tracing`)**: Chose the `tracing` crate for structured, context-aware diagnostics.
 - **Feature Flags (`Strategy Pattern`)**: Used the strategy pattern to create a decoupled and extensible evaluation engine.
@@ -51,6 +56,7 @@
 - **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
 
 ### Current State
+- A manual release workflow is in place to automate versioning, changelogs, and releases.
 - Performance benchmarks are in place for the `config` crate.
 - A dedicated documentation pipeline builds the `mdBook`.
 - A dedicated security pipeline runs vulnerability and license checks.
@@ -59,12 +65,13 @@
 - The `ciphr-test-utils` crate has a test harness and file utilities.
 - The `ciphr-logging` and `ciphr-feature-flags` crates have their foundational logic.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #010, #011, #012, #013, #014, and #015 are complete. Task #009 is in progress.
+- Tasks #001-005, #007, #008, #010, #011, #012, #013, #014, #015, and #016 are complete. Task #009 is in progress.
 
 ### Next Steps
-- Implement release automation (Task #016).
 - Continue implementation of the testing framework (Task #009).
+- Implement advanced feature flag capabilities (Task #017).
 
 ### Technical Debt
+- The release workflow does not yet publish to package registries like crates.io.
 - The `ciphr-config` crate does not yet support environment variable overrides or watching for file changes.
 - The newly created crates contain only template code from `cargo new`. They need to be populated with their respective logic.
