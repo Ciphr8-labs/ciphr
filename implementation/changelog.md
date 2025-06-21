@@ -42,6 +42,9 @@
 - **Testing Framework**:
     - Integrated `proptest` for property-based testing.
     - The `ciphr-test-utils` crate now includes utilities for file system mocking, test harnesses, and property testing.
+- **Advanced Feature Flags**:
+    - Implemented a `UserSegmentEvaluator` to target features to specific user groups.
+    - Enhanced the `PercentageRolloutEvaluator` to use consistent hashing, ensuring users have a stable feature experience.
 
 ### Technical Decisions
 - **Task Runner (`just`)**: Chose `just` for its simplicity and Makefile-like syntax to run project scripts.
@@ -50,7 +53,7 @@
 - **Release Automation (`release-plz`)**: Chose `release-plz` to automate the release process for the workspace. It handles version calculation, changelog generation, and artifact creation, simplifying the process of creating consistent releases.
 - **Configuration (`Layered & Builder`)**: Designed the config crate with a `ConfigurationProvider` trait that supports layering and a fluent `AppConfigBuilder` for ergonomic construction.
 - **Logging (`tracing`)**: Chose the `tracing` crate for structured, context-aware diagnostics.
-- **Feature Flags (`Strategy Pattern`)**: Used the strategy pattern to create a decoupled and extensible evaluation engine.
+- **Feature Flags (`Strategy Pattern & Hashing`)**: The feature flag system uses the Strategy pattern for extensibility. For percentage rollouts, it now uses SipHasher to ensure consistent, sticky experiences for users.
 - **CI/CD (`GitHub Actions`)**: Chose GitHub Actions for its tight integration, multi-platform matrix, and ability to have separate, focused workflows (CI, Security, Docs).
 - **Security Scanning (`cargo-audit` & `cargo-deny`)**: A dedicated security workflow automates vulnerability and license checking. The separation keeps the main CI loop fast while ensuring security is not neglected.
 - **Documentation (`mdBook`)**: A dedicated workflow automatically builds the `mdBook` documentation, ensuring it's always up-to-date.
@@ -69,13 +72,13 @@
 - The `ciphr-test-utils` crate has a test harness and file utilities.
 - The `ciphr-logging` and `ciphr-feature-flags` crates have their foundational logic.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #009, #010, #011, #012, #013, #014, #015, and #016 are complete.
+- Tasks #001-005, #007, #008, #009, #010, #011, #012, #013, #014, #015, #016, and #017 are complete.
 
 ### Next Steps
-- Implement advanced feature flag capabilities (Task #017).
 - Implement error tracking and monitoring integration (Task #018).
+- Enhance community contribution workflows (Task #019).
 
 ### Technical Debt
+- The feature flag system does not yet support A/B testing or analytics.
 - The release workflow does not yet publish to package registries like crates.io.
 - The `ciphr-config` crate does not yet support environment variable overrides or watching for file changes.
-- The newly created crates contain only template code from `cargo new`. They need to be populated with their respective logic.
