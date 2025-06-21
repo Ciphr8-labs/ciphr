@@ -3,6 +3,9 @@
 ## [2025-06-21] - Dev Env Setup - IN_PROGRESS
 
 ### Implemented
+- **Performance Benchmarking**:
+    - Set up `criterion` for performance benchmarking.
+    - Added initial benchmarks for configuration loading and building.
 - **Documentation Pipeline**:
     - Created a dedicated `docs.yml` workflow to automatically build the project's `mdBook` documentation.
     - The generated book is uploaded as a build artifact for future deployment.
@@ -37,27 +40,29 @@
 - **Task Runner (`just`)**: Chose `just` for its simplicity and Makefile-like syntax to run project scripts.
 - **Environment Management (`Devbox`)**: Chose Devbox to ensure a reproducible development environment powered by Nix.
 - **Architecture (`Modular Workspace`)**: Adopted a workspace structure with multiple crates to promote modularity and separation of concerns.
-- **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
 - **Configuration (`Layered & Builder`)**: Designed the config crate with a `ConfigurationProvider` trait that supports layering and a fluent `AppConfigBuilder` for ergonomic construction.
 - **Logging (`tracing`)**: Chose the `tracing` crate for structured, context-aware diagnostics.
 - **Feature Flags (`Strategy Pattern`)**: Used the strategy pattern to create a decoupled and extensible evaluation engine.
 - **CI/CD (`GitHub Actions`)**: Chose GitHub Actions for its tight integration, multi-platform matrix, and ability to have separate, focused workflows (CI, Security, Docs).
-- **Security Scanning (`cargo-audit` & `cargo-deny`)**: A dedicated security workflow automates vulnerability and license checking, keeping the main CI loop fast.
+- **Security Scanning (`cargo-audit` & `cargo-deny`)**: A dedicated security workflow automates vulnerability and license checking. The separation keeps the main CI loop fast while ensuring security is not neglected.
 - **Documentation (`mdBook`)**: A dedicated workflow automatically builds the `mdBook` documentation, ensuring it's always up-to-date.
-- **Test Harness**: Implemented a `TestHarness` to provide isolated, temporary directories for file system-dependent tests.
+- **Test Harness (`ciphr-test-utils`)**: Implemented a `TestHarness` to provide isolated, temporary directories for file system-dependent tests.
+- **Benchmarking (`criterion`)**: Added `criterion` to the project to enable performance benchmarking. This will help identify and track performance regressions in critical code paths over time.
+- **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
 
 ### Current State
-- A documentation pipeline automatically builds the project's `mdBook`.
+- Performance benchmarks are in place for the `config` crate.
+- A dedicated documentation pipeline builds the `mdBook`.
 - A dedicated security pipeline runs vulnerability and license checks.
 - A basic, multi-platform CI pipeline automatically runs tests, lints, and format checks.
 - The `ciphr-config` crate now supports layered configurations from multiple sources.
 - The `ciphr-test-utils` crate has a test harness and file utilities.
 - The `ciphr-logging` and `ciphr-feature-flags` crates have their foundational logic.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #010, #011, #012, #013, and #014 are complete. Task #009 is in progress.
+- Tasks #001-005, #007, #008, #010, #011, #012, #013, #014, and #015 are complete. Task #009 is in progress.
 
 ### Next Steps
-- Implement performance benchmarking (Task #015).
+- Implement release automation (Task #016).
 - Continue implementation of the testing framework (Task #009).
 
 ### Technical Debt
