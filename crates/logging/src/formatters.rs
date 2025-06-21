@@ -14,7 +14,7 @@ where
 {
     fn format_event(
         &self,
-        ctx: &FmtContext<'_, S, N>,
+        _ctx: &FmtContext<'_, S, N>,
         mut writer: Writer<'_>,
         event: &Event<'_>,
     ) -> std::fmt::Result {

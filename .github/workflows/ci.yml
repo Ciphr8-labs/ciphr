@@ -26,5 +26,11 @@ jobs:
         profile: minimal
         override: true
 
+    - name: Check formatting
+      run: cargo fmt --check --all
+
+    - name: Run linter
+      run: cargo clippy -- -D warnings
+
     - name: Run tests
       run: cargo test --workspace --all-targets 

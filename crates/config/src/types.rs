@@ -1,5 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
+use std::fmt;
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(rename_all = "lowercase")]
@@ -10,13 +11,13 @@ pub enum LogLevel {
     Error,
 }
 
-impl ToString for LogLevel {
-    fn to_string(&self) -> String {
+impl fmt::Display for LogLevel {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            LogLevel::Debug => "debug".to_string(),
-            LogLevel::Info => "info".to_string(),
-            LogLevel::Warn => "warn".to_string(),
-            LogLevel::Error => "error".to_string(),
+            LogLevel::Debug => write!(f, "debug"),
+            LogLevel::Info => write!(f, "info"),
+            LogLevel::Warn => write!(f, "warn"),
+            LogLevel::Error => write!(f, "error"),
         }
     }
 }

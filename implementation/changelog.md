@@ -6,6 +6,7 @@
 - **CI/CD Pipeline**:
     - Created a basic GitHub Actions workflow (`ci.yml`) that runs tests on every push and pull request to `main`.
     - Configured the pipeline to run on Ubuntu, macOS, and Windows to ensure cross-platform compatibility.
+    - Added steps for formatting (`cargo fmt`) and linting (`cargo clippy`) to enforce code quality.
 - **Test Utilities (`ciphr-test-utils`)**:
     - Implemented the initial `TestHarness` to provide isolated file system environments for tests using `tempfile`.
     - Added a `create_file_with_content` helper function to the `test-utils` crate.
