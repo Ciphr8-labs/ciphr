@@ -9,6 +9,11 @@
     - Added a workflow to welcome first-time contributors.
     - Set up the `all-contributors` bot for automated contributor recognition.
     - Implemented an automatic labeling workflow for pull requests based on file paths.
+- **Comprehensive Documentation (`mdBook`)**:
+    - Created and structured a central `mdBook` for all project documentation.
+    - Extracted all Architecture Decision Records (ADRs) from the design document into the book.
+    - Populated the book with a User Guide (including a new Windows Setup section), Architecture details, Operational procedures, and Community guidelines.
+    - Refined the "Getting Started" guide based on a "happy path" analysis of a new contributor's journey.
 - **Monitoring Framework**:
     - Created a `ciphr-monitoring` crate to handle error tracking and event monitoring.
     - Defined a `MonitoringService` trait and a `MockMonitoringService` for local development.
@@ -65,7 +70,7 @@
 - **Feature Flags (`Strategy Pattern & Hashing`)**: The feature flag system uses the Strategy pattern for extensibility. For percentage rollouts, it now uses SipHasher to ensure consistent, sticky experiences for users.
 - **CI/CD (`GitHub Actions`)**: Chose GitHub Actions for its tight integration, multi-platform matrix, and ability to have separate, focused workflows (CI, Security, Docs).
 - **Security Scanning (`cargo-audit` & `cargo-deny`)**: A dedicated security workflow automates vulnerability and license checking. The separation keeps the main CI loop fast while ensuring security is not neglected.
-- **Documentation (`mdBook`)**: A dedicated workflow automatically builds the `mdBook` documentation, ensuring it's always up-to-date.
+- **Documentation (`mdBook`)**: Centralized all project documentation into an `mdBook` to create a unified, browsable experience. This includes user guides, architectural decision records (ADRs), operational procedures, and community guidelines, with a dedicated workflow to keep it up-to-date.
 - **Test Harness (`ciphr-test-utils`)**: Implemented a `TestHarness` to provide isolated, temporary directories for file system-dependent tests.
 - **Benchmarking (`criterion`)**: Added `criterion` to the project to enable performance benchmarking. This will help identify and track performance regressions in critical code paths over time.
 - **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.

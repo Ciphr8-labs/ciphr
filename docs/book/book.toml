@@ -1,0 +1,10 @@
+[book]
+authors = ["Ciphr Team"]
+language = "en"
+multilingual = false
+src = "src"
+title = "Ciphr Developer Documentation"
+
+[output.html]
+git-repository-url = "https://github.com/your-org/ciphr"
+edit-url-template = "https://github.com/your-org/ciphr/edit/main/{path}" 

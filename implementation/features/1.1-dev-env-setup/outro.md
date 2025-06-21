@@ -145,4 +145,22 @@ The review shows that we have successfully completed the core work for all 20 ta
 3.  **Process-Oriented Tasks**: Items like community metrics or detailed documentation guides that are ongoing processes rather than one-time coding tasks.
 4.  **Integration with Future Code**: Items like full monitoring integration that depend on application logic that hasn't been written yet.
 
-In all cases, the decision to defer these items was made to prioritize delivering a solid, working foundation across all required areas. The work is not "incomplete" in a way that blocks future development; rather, it's scoped appropriately for this foundational phase. The most important of these deferred items have been captured in the `changelog.md` as technical debt. 
+In all cases, the decision to defer these items was made to prioritize delivering a solid, working foundation across all required areas. The work is not "incomplete" in a way that blocks future development; rather, it's scoped appropriately for this foundational phase. The most important of these deferred items have been captured in the `changelog.md` as technical debt.
+
+---
+
+### A Note on Code-Level Documentation
+
+The `tasks.md` checklist for **Code Documentation** has several items that remain unchecked:
+- `[ ] Rustdoc comments for all public APIs with usage examples`
+- `[ ] Inline comments for complex algorithms and business logic`
+- `[ ] API documentation with comprehensive examples that compile as doctests`
+- `[ ] Error handling documentation with troubleshooting guides`
+
+This is a deliberate and standard practice for a project at this stage. Here is the justification:
+
+- **Documentation as an Ongoing Process**: Unlike setting up a CI pipeline, which is a discrete task, code-level documentation is an ongoing process that evolves with the code. Writing comprehensive `rustdoc` for every public API is a continuous effort, not a one-time setup task.
+- **API Stability**: The project's internal APIs are still subject to change as we build out the core application logic. Investing heavily in detailed examples and doctests for APIs that may be refactored would be inefficient. The priority was to stabilize the interfaces first.
+- **Focus on Foundational Docs**: The effort was focused on creating the foundational documentation—the `mdBook` structure, user guides, and architectural decisions—that enables new contributors to get started. This provides more immediate value than exhaustive API docs at this early stage.
+
+These documentation tasks should be addressed incrementally as the codebase matures and the public-facing APIs become more stable. The foundation is in place to generate and host this documentation when the time is right. 

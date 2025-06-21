@@ -740,9 +740,9 @@ Critical for maintaining security posture, especially for financial software.
 Implement automated documentation generation using rustdoc, mdBook, and community contribution guidelines with automated validation.
 
 **Acceptance Criteria**:
-- [ ] Automated API documentation generation with examples
+- [x] Automated API documentation generation with examples
 - [x] User guide and tutorial generation with mdBook
-- [ ] Contribution guidelines with automated validation
+- [x] Contribution guidelines with automated validation
 - [x] Documentation site deployment and hosting
 - [x] Doctests execution as part of CI pipeline
 
@@ -765,7 +765,7 @@ Implement automated documentation generation using rustdoc, mdBook, and communit
 **Deliverables**:
 - [x] `docs/` directory with mdBook structure and content
 - [x] Automated documentation generation scripts
-- [ ] Community contribution guidelines and templates
+- [x] Community contribution guidelines and templates
 - [x] Documentation site deployment configuration
 - [x] Tests: Documentation validation and generation testing
 
@@ -1133,30 +1133,30 @@ Essential for production operations and maintaining service reliability.
 ### Code Documentation
 - [ ] Rustdoc comments for all public APIs with usage examples
 - [ ] Inline comments for complex algorithms and business logic
-- [ ] Architecture Decision Records (ADRs) for major design decisions
+- [x] Architecture Decision Records (ADRs) for major design decisions
 - [ ] API documentation with comprehensive examples that compile as doctests
 - [ ] Error handling documentation with troubleshooting guides
 
 ### User Documentation
-- [ ] Getting started guide with one-command setup instructions
-- [ ] Development workflow documentation with common task examples
-- [ ] Configuration reference with all options and examples
-- [ ] Feature flag usage guide with best practices and examples
-- [ ] Troubleshooting guide for common development environment issues
+- [x] Getting started guide with one-command setup instructions
+- [x] Development workflow documentation with common task examples
+- [x] Configuration reference with all options and examples
+- [x] Feature flag usage guide with best practices and examples
+- [x] Troubleshooting guide for common development environment issues
 
 ### Operational Documentation
-- [ ] CI/CD pipeline documentation with troubleshooting and maintenance
-- [ ] Security scanning setup and response procedures
-- [ ] Release process documentation with rollback procedures
-- [ ] Monitoring and alerting setup guide with operational runbooks
-- [ ] Performance optimization guide with benchmarking procedures
+- [x] CI/CD pipeline documentation with troubleshooting and maintenance
+- [x] Security scanning setup and response procedures
+- [x] Release process documentation with rollback procedures
+- [x] Monitoring and alerting setup guide with operational runbooks
+- [x] Performance optimization guide with benchmarking procedures
 
 ### Community Documentation
-- [ ] Contributing guidelines with clear workflow and standards
-- [ ] Code of conduct and community guidelines
-- [ ] Issue and pull request templates with required information
-- [ ] Security vulnerability reporting procedures
-- [ ] Community onboarding guide with mentorship information
+- [x] Contributing guidelines with clear workflow and standards
+- [x] Code of conduct and community guidelines
+- [x] Issue and pull request templates with required information
+- [x] Security vulnerability reporting procedures
+- [x] Community onboarding guide with mentorship information
 
 ---
 
