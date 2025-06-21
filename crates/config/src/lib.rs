@@ -4,6 +4,7 @@
 //! It includes definitions for core configuration types, error handling, and
 //! traits for implementing various configuration providers.
 
+pub mod builder;
 pub mod errors;
 pub mod loader;
 pub mod traits;

@@ -6,88 +6,60 @@
 - **CI/CD Pipeline**:
     - Created a basic GitHub Actions workflow (`ci.yml`) that runs tests on every push and pull request to `main`.
     - Configured the pipeline to run on Ubuntu, macOS, and Windows to ensure cross-platform compatibility.
-    - Added steps for formatting (`cargo fmt`) and linting (`cargo clippy`) to enforce code quality.
-    - Added a parallel job for security scanning with `cargo audit`.
+    - Added steps for formatting (`cargo fmt`), linting (`cargo clippy`), and security scanning (`cargo audit`) to enforce code quality.
 - **Test Utilities (`ciphr-test-utils`)**:
     - Implemented the initial `TestHarness` to provide isolated file system environments for tests using `tempfile`.
     - Added a `create_file_with_content` helper function to the `test-utils` crate.
+- **Configuration Crate (`ciphr-config`)**:
+    - Implemented a fluent `AppConfigBuilder` to allow for programmatic and testable configuration construction.
+    - Implemented a `FileConfigurationProvider` to load settings from TOML files.
+    - Implemented core configuration types (`AppConfig`, `LogLevel`, `LogFormat`).
+    - Defined a `ConfigurationProvider` trait for loading config from various sources.
+    - Created a comprehensive `ConfigError` enum for error handling.
 - **Logging Crate (`ciphr-logging`)**:
     - Refactored the `init` module to return a `Layer` instead of initializing a global subscriber, giving consumers control over initialization and resolving complex testing issues.
     - Implemented a structured logging system using the `tracing` ecosystem.
     - Created a `JsonFormatter` for outputting logs in a machine-readable format.
     - Defined `RequestContext` to enable log correlation via request IDs.
-    - Added comprehensive error types for the logging system.
-    - Updated `AppConfig` in `ciphr-config` to include `log_format`.
-    - Added unit and integration tests to verify the layer can be created and used correctly.
 - **Feature Flag Crate (`ciphr-feature-flags`)**:
     - Implemented a basic, extensible feature flag evaluation engine.
     - Defined a `FeatureFlagEvaluator` trait to support multiple evaluation strategies (Strategy Pattern).
     - Created a `PercentageRolloutEvaluator` for percentage-based rollouts.
-    - Added a `FeatureFlagManager` to manage flag state and evaluation.
-    - Included an `EvaluationContext` for passing user or request data.
-    - Added dependencies (`uuid`, `rand`) for evaluation context and randomized rollouts.
-    - Added unit tests for the percentage rollout strategy.
 - **Development Workflow (`justfile`)**:
     - Created a `justfile` with common development tasks (`test`, `fmt`, `clippy`, `build`, etc.).
     - Added `cargo-audit` to the dev environment for the `just audit` task.
-- **Configuration Crate (`ciphr-config`)**:
-    - Implemented a `FileConfigurationProvider` to load settings from TOML files.
-    - Added `#[serde(default)]` to allow optional fields in the config.
-    - Implemented core configuration types (`AppConfig`, `LogLevel`, `LogFormat`).
-    - Defined a `ConfigurationProvider` trait for loading config from various sources.
-    - Created a comprehensive `ConfigError` enum for error handling.
-    - Added unit tests for types, traits, and the file loader.
 - **Git Workflow Automation**:
     - Created shared Git hooks (`pre-commit`, `commit-msg`, `pre-push`) to automate formatting, linting, testing, and commit message validation.
     - Added a `.github/pull_request_template.md` to standardize PRs.
     - Wrote `docs/contributing.md` to explain the development workflow and contribution guidelines.
 - **Devbox Environment**: Created a `devbox.json` to provide a consistent, cross-platform development environment with `rustup`, `just`, and `git`.
-- **Validation Script**: Added an executable script (`scripts/validate-environment.sh`) to verify tool availability and versions.
-- **Setup Documentation**: Wrote `docs/environment-setup.md` with clear instructions for new contributors.
-- **Rust Workspace**: Initialized a Rust workspace with a root `Cargo.toml`.
-- **Crate Structure**: Created a modular crate structure under `crates/` (`cli`, `config`, `dev-env`, `feature-flags`, `logging`, `test-utils`).
-- **Architecture Docs**: Added `docs/architecture.md` to document the workspace structure.
+- **Core Workspace & Crates**:
+    - Initialized a Rust workspace with a root `Cargo.toml`.
+    - Created a modular crate structure under `crates/` (`cli`, `config`, `dev-env`, `feature-flags`, `logging`, `test-utils`).
+    - Added foundational documentation (`architecture.md`, `environment-setup.md`).
 
 ### Technical Decisions
-- **Task Runner (`just`)**: Chose `just` as the command runner for its simplicity, Makefile-like syntax, and cross-platform compatibility.
-- **Rationale**: `just` provides a convenient way to document and run project-specific commands, improving developer experience and ensuring consistency in how tasks are executed.
-- **Separation of Concerns (Config)**: The `load` and `validate` functions in the `ConfigurationProvider` trait are kept separate.
-- **Rationale**: This gives consumers of the crate more control. They can choose to load a configuration without immediately validating it, or re-validate a modified configuration object without reloading it from the source.
-- **Config Trait-based Design**: The `ConfigurationProvider` trait was chosen to decouple the configuration consumers from the loading mechanism.
-- **Rationale**: This allows for easy extension in the future. We can add providers for environment variables, remote configuration services (like Consul or etcd), or different file formats without changing the application code that consumes the configuration.
-- **Git Hooks**: Adopted a shared `.githooks` directory instead of individual `.git/hooks` setups.
-- **Rationale**: This ensures that all contributors use the same quality gates, making the process of enabling them as simple as a single `git config` command. It keeps workflow automation version-controlled and consistent.
-- **Environment Management**: Chose Devbox to ensure a reproducible development environment.
-- **Rationale**: Devbox, powered by Nix, provides an isolated and consistent environment across macOS, Linux, and Windows (via WSL2), which is crucial for a distributed open-source team and community contributors. It simplifies onboarding to a single `devbox shell` command.
-- **Architecture**: Adopted a workspace structure with multiple crates.
-- **Rationale**: This promotes modularity, clear separation of concerns, and code reuse, which is essential for a large open-source project. It allows different components to be developed and tested independently.
-- **Test Harness**: The `TestHarness` provides a convenient way to create isolated environments for tests.
-- **Rationale**: By managing temporary directories, it ensures that tests requiring file-system access are hermetic and do not interfere with each other or the host system, which is crucial for reliable and parallel test execution.
-- **CI/CD with GitHub Actions**: GitHub Actions was chosen for its tight integration with the source code repository and its generous free tier for open-source projects.
-- **Rationale**: A multi-platform matrix strategy ensures that any platform-specific issues are caught early in the development process, which is critical for an application intended to be cross-platform.
-- **Structured Logging (`tracing`)**: Chose the `tracing` crate as the foundation for logging and observability.
-- **Rationale**: `tracing` provides structured, context-aware diagnostics. Unlike traditional logging, it captures information about the execution flow, which is invaluable for debugging complex, asynchronous applications. The use of custom formatters allows us to produce JSON logs suitable for modern log aggregation platforms.
-- **Feature Flag Engine (Strategy Pattern)**: The core of the feature flag system is the `FeatureFlagEvaluator` trait.
-- **Rationale**: This allows for different evaluation methods (e.g., on/off, percentage, user targeting) to be developed and swapped without changing the code that consumes the flags. It promotes extensibility and adheres to the Open/Closed Principle.
+- **Task Runner (`just`)**: Chose `just` for its simplicity and Makefile-like syntax to run project scripts.
+- **Environment Management (`Devbox`)**: Chose Devbox to ensure a reproducible development environment powered by Nix.
+- **Architecture (`Modular Workspace`)**: Adopted a workspace structure with multiple crates to promote modularity and separation of concerns.
+- **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
+- **Configuration (`Trait-based & Builder`)**: Designed the config crate with a `ConfigurationProvider` trait for flexibility and a fluent `AppConfigBuilder` for ergonomic, testable construction.
+- **Logging (`tracing`)**: Chose the `tracing` crate for structured, context-aware diagnostics suitable for modern observability platforms.
+- **Feature Flags (`Strategy Pattern`)**: Used the strategy pattern (`FeatureFlagEvaluator` trait) to create a decoupled and extensible evaluation engine.
+- **CI/CD (`GitHub Actions`)**: Chose GitHub Actions for its tight integration with the source repository and multi-platform testing matrix.
+- **Test Harness**: Implemented a `TestHarness` to provide isolated, temporary directories for file system-dependent tests.
 
 ### Current State
-- A basic, multi-platform CI pipeline is in place to automatically run tests.
+- A fluent builder is available for creating `AppConfig` instances.
+- A basic, multi-platform CI pipeline automatically runs tests, lints, and security scans.
 - The `ciphr-test-utils` crate has an initial test harness for isolated testing.
 - The `ciphr-logging` crate provides configurable structured logging.
 - The `ciphr-feature-flags` crate has a foundational evaluation engine.
-- Common development tasks are automated and documented in a `justfile`.
-- The `ciphr-config` crate can now load configuration from TOML files.
-- The `ciphr-config` crate has its foundational types, traits, and tests implemented.
-- Automated quality gates (format, lint, test, commit message validation) are available via Git hooks.
-- Contribution guidelines and PR templates are in place.
-- A reproducible development environment can be launched with `devbox shell`.
-- The Rust workspace is successfully set up and validated with `cargo check`.
-- Core crate structure is in place for future development.
-- Architectural and setup documentation has been created.
-- Tasks #001-005, #007, #008, and #010 are complete. Task #009 is in progress.
+- Core development environment and workflow automation are in place.
+- Tasks #001-005, #007, #008, #010, and #011 are complete. Task #009 is in progress.
 
 ### Next Steps
-- Implement a fluent configuration builder pattern (Task #011).
+- Implement environment-specific configuration overrides (Task #012).
 - Continue implementation of the testing framework (Task #009).
 
 ### Technical Debt
