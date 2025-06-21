@@ -12,4 +12,7 @@ repository.workspace = true
 [dependencies]
 config = { path = "../config" }
 rand = { workspace = true }
+siphasher = "0.3.11"
+
+[dev-dependencies]
 uuid = { workspace = true }
