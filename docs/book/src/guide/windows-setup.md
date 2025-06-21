@@ -42,4 +42,4 @@ You may need to re-clone the repository after changing this setting.
 chmod +x ./scripts/validate-environment.sh
 ```
 
-If you encounter an issue not listed here, please [ask for help in GitHub Discussions](https://github.com/ciphr-org/ciphr/discussions). 
+If you encounter an issue not listed here, please [ask for help in GitHub Discussions](https://github.com/Ciphr8-labs/ciphr/discussions). 

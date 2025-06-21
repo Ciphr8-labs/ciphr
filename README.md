@@ -14,7 +14,7 @@ This guide will get you set up to contribute to Ciphr in minutes.
 2.  **Enter Development Environment**:
     Clone the repository and enter the devbox shell. This command installs all necessary tools inside an isolated environment.
     ```bash
-    git clone https://github.com/ciphr-org/ciphr.git
+    git clone https://github.com/Ciphr8-labs/ciphr.git
     cd ciphr
     devbox shell
     ```

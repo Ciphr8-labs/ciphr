@@ -6,5 +6,5 @@ src = "src"
 title = "Ciphr Developer Documentation"
 
 [output.html]
-git-repository-url = "https://github.com/your-org/ciphr"
-edit-url-template = "https://github.com/your-org/ciphr/edit/main/{path}" 
+git-repository-url = "https://github.com/Ciphr8-labs/ciphr"
+edit-url-template = "https://github.com/Ciphr8-labs/ciphr/edit/main/{path}" 

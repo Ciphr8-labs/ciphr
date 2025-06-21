@@ -13,7 +13,7 @@ The entire development environment is managed by [Devbox](https://www.jetpack.io
 
 2.  **Clone the Repository**:
     ```bash
-    git clone https://github.com/your-org/ciphr.git
+    git clone https://github.com/Ciphr8-labs/ciphr.git
     cd ciphr
     ```
 
