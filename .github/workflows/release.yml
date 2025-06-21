@@ -1,0 +1,28 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          # Fetch all history for all tags and branches
+          fetch-depth: 0
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Install release-plz
+        uses: cargo-bins/cargo-binstall@main
+        with:
+          bins: release-plz-cli
+
+      - name: Run release-plz
+        run: release-plz release --workspace
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
