@@ -1,14 +1,12 @@
-use uuid::Uuid;
 use std::collections::HashMap;
 
-/// Provides context for feature flag evaluation.
-///
-/// This can be extended to include information about the user, request,
-/// or environment, allowing for more sophisticated targeting rules.
+/// Contains contextual information for evaluating a feature flag.
 #[derive(Debug, Default)]
 pub struct EvaluationContext {
     /// A unique identifier for the user or session.
-    pub user_id: Option<Uuid>,
+    pub user_id: Option<String>,
+    /// A unique identifier for the user segment.
+    pub user_segment: Option<String>,
     /// Additional properties for custom evaluation strategies.
     pub properties: HashMap<String, String>,
 }
