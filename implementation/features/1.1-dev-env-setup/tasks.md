@@ -497,9 +497,9 @@ Implement comprehensive testing utilities, harnesses, and infrastructure for the
 **Acceptance Criteria**:
 - [x] Test harness with environment setup and teardown
 - [x] Mock file system utilities for isolated testing
-- [ ] Property-based testing integration with proptest
-- [ ] Benchmark infrastructure with criterion
-- [ ] Temporary environment creation for integration tests
+- [x] Property-based testing integration with proptest
+- [x] Benchmark infrastructure with criterion
+- [x] Temporary environment creation for integration tests
 
 **Technical Requirements**:
 - **Functional Programming**: Pure test utility functions, immutable test state
@@ -520,7 +520,7 @@ Implement comprehensive testing utilities, harnesses, and infrastructure for the
 **Deliverables**:
 - [x] `ciphr-testing/src/harness.rs` with test environment management
 - [x] `ciphr-testing/src/mock_fs.rs` with file system mocking utilities
-- [ ] `ciphr-testing/src/property.rs` with proptest integration
+- [x] `ciphr-testing/src/property.rs` with proptest integration
 - [ ] Documentation: Testing best practices and utility guide
 - [ ] Tests: Meta-tests validating testing infrastructure
 
