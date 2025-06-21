@@ -1,0 +1,15 @@
+[package]
+name = "monitoring"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+repository.workspace = true
+description.workspace = true
+rust-version.workspace = true
+bench.workspace = true
+
+[dependencies]
+
+[lints]
+workspace = true

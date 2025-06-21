@@ -42,6 +42,9 @@
 - **Testing Framework**:
     - Integrated `proptest` for property-based testing.
     - The `ciphr-test-utils` crate now includes utilities for file system mocking, test harnesses, and property testing.
+- **Monitoring Framework**:
+    - Created a `ciphr-monitoring` crate to handle error tracking and event monitoring.
+    - Defined a `MonitoringService` trait and a `MockMonitoringService` for local development.
 - **Advanced Feature Flags**:
     - Implemented a `UserSegmentEvaluator` to target features to specific user groups.
     - Enhanced the `PercentageRolloutEvaluator` to use consistent hashing, ensuring users have a stable feature experience.
@@ -61,6 +64,7 @@
 - **Benchmarking (`criterion`)**: Added `criterion` to the project to enable performance benchmarking. This will help identify and track performance regressions in critical code paths over time.
 - **Git Hooks (`Shared Directory`)**: Adopted a shared `.githooks` directory to ensure all contributors use the same version-controlled quality gates.
 - **Testing Framework (`proptest`, `criterion`)**: Established a comprehensive testing foundation. `criterion` is used for performance benchmarking, and `proptest` is integrated for property-based testing, allowing for more robust and exhaustive tests.
+- **Monitoring (`Trait-based`)**: Established a trait-based approach for monitoring and error reporting (`MonitoringService`). This decouples the application from any specific monitoring service and allows for a mock implementation in tests.
 
 ### Current State
 - A manual release workflow is in place to automate versioning, changelogs, and releases.
@@ -71,14 +75,16 @@
 - The `ciphr-config` crate now supports layered configurations from multiple sources.
 - The `ciphr-test-utils` crate has a test harness and file utilities.
 - The `ciphr-logging` and `ciphr-feature-flags` crates have their foundational logic.
+- The `ciphr-monitoring` crate has a `MonitoringService` trait and a `MockMonitoringService` for local development.
 - Core development environment and workflow automation are in place.
-- Tasks #001-005, #007, #008, #009, #010, #011, #012, #013, #014, #015, #016, and #017 are complete.
+- Tasks #001-005, #007, #008, #009, #010, #011, #012, #013, #014, #015, #016, and #017 are complete. Task #018 is in progress.
 
 ### Next Steps
-- Implement error tracking and monitoring integration (Task #018).
 - Enhance community contribution workflows (Task #019).
+- Implement production monitoring and observability setup (Task #020).
 
 ### Technical Debt
 - The feature flag system does not yet support A/B testing or analytics.
 - The release workflow does not yet publish to package registries like crates.io.
 - The `ciphr-config` crate does not yet support environment variable overrides or watching for file changes.
+- The newly created crates contain only template code from `cargo new`. They need to be populated with their respective logic.

@@ -4,7 +4,7 @@ members = [
     "crates/config",
     "crates/dev-env",
     "crates/feature-flags",
-    "crates/logging",
+    "crates/logging", "crates/monitoring",
     "crates/test-utils"
 ]
 resolver = "2"
