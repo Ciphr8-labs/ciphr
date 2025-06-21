@@ -1,0 +1,12 @@
+{
+  "projectName": "Ciphr",
+  "projectOwner": "your-github-organization",
+  "repoType": "github",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [],
+  "contributorsPerLine": 7
+} 
